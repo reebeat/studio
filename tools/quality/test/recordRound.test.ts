@@ -1,7 +1,9 @@
 import { NodeServices } from "@effect/platform-node";
 import { assert, describe, it } from "@effect/vitest";
-import { Array as Arr, Config, Effect, FileSystem, Path, Schema } from "effect";
-import { ChildProcess, ChildProcessSpawner } from "effect/process";
+import { Array as Arr, Effect } from "effect";
+import { ChildProcess } from "effect/process";
+
+import { scriptHarness } from "./scriptHarness.ts";
 
 // The script is the contract (spec 0003, F5): it runs with a stub `gh` first on PATH that records each call.
 const stubGh = `#!/usr/bin/env bash
@@ -14,17 +16,11 @@ esac
 
 const run = (verdict: string, body: string) =>
   Effect.gen(function* recordRound() {
-    const fs = yield* FileSystem.FileSystem;
-    const path = yield* Path.Path;
-    const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
-    const dir = yield* fs.makeTempDirectoryScoped();
-    const root = yield* path.fromFileUrl(new URL("../../../", import.meta.url));
+    const { dir, fs, path, root, spawner, systemPath } = yield* scriptHarness;
     const script = path.join(root, ".agents/skills/review-pr/record-round.sh");
 
     yield* fs.writeFileString(path.join(dir, "gh"), stubGh, { mode: 0o755 });
     yield* fs.writeFileString(path.join(dir, "body.md"), body);
-
-    const systemPath = yield* Config.schema(Schema.String, "PATH");
 
     const exitCode = yield* spawner.exitCode(
       ChildProcess.make(

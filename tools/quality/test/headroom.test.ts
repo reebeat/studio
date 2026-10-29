@@ -1,16 +1,9 @@
 import { NodeServices } from "@effect/platform-node";
 import { assert, describe, it } from "@effect/vitest";
-import {
-  Array as Arr,
-  Config,
-  Effect,
-  FileSystem,
-  Path,
-  Result,
-  Schema,
-  String as Str,
-} from "effect";
-import { ChildProcess, ChildProcessSpawner } from "effect/process";
+import { Array as Arr, Effect, Result, String as Str } from "effect";
+import { ChildProcess } from "effect/process";
+
+import { scriptHarness } from "./scriptHarness.ts";
 
 // Spec 0003, Revisions 2026-10-29: `headroom.sh` reads the kernel files from PROC_ROOT, so each gate has a control with an
 // injected sample. A stub `sleep` first on PATH grows `pswpin` by STUB_SWAPIN_DELTA, which is the sample window.
@@ -52,11 +45,7 @@ const gates = (stdout: string) => ({
 
 const run = (sample: Sample) =>
   Effect.gen(function* runHeadroom() {
-    const fs = yield* FileSystem.FileSystem;
-    const path = yield* Path.Path;
-    const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
-    const dir = yield* fs.makeTempDirectoryScoped();
-    const root = yield* path.fromFileUrl(new URL("../../../", import.meta.url));
+    const { dir, fs, path, root, spawner, systemPath } = yield* scriptHarness;
 
     const script = path.join(
       root,
@@ -83,8 +72,6 @@ const run = (sample: Sample) =>
       path.join(proc, "pressure", "memory"),
       `some avg10=50.00 avg60=50.00 avg300=50.00 total=1\nfull avg10=${sample.psiFullAvg10} avg60=${sample.psiFullAvg60} avg300=0.00 total=1\n`
     );
-
-    const systemPath = yield* Config.schema(Schema.String, "PATH");
 
     const stdout = yield* spawner.string(
       ChildProcess.make("bash", ["-c", '"$0"; echo "exit=$?"', script], {
