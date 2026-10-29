@@ -127,12 +127,12 @@ Stop the supervised launch (OMP: kill the named bash job) or let `scripts/cleanu
 
 ## Exercised, and not
 
-Exercised on 2026-10-29 (spec 0003): launch in preview and in dev from a fresh worktree of PR #1's head, the doctor, `page.sh`, the OMP `browser` tool on the toggle and the layout, `cleanup.sh` (twice), a refused launch for short headroom. Evidence paths are in the PR of spec 0003. Not exercised: a Windows or macOS host, a browser other than Chromium, `agent-browser`, the `VERIFY_FORCE=1` path.
+Exercised on 2026-10-29 (spec 0003): launch in preview and in dev from a fresh worktree of PR #1's head (`bdb3a01`, then `643096e`), the doctor, `page.sh`, the OMP `browser` tool on the toggle and the layout, `cleanup.sh` (and a second run: `nothing to clean`), a refused launch for short headroom, and two controls on `643096e` (an `update` that ignores the toggle fails `shell-inspector-toggle`; an `h1` turned into a `p` makes the doctor refuse the launch). Evidence paths are in the PR of spec 0003. Not exercised: a Windows or macOS host, a browser other than Chromium, `agent-browser`, the `VERIFY_FORCE=1` path, a PR head fetched from GitHub by number.
 
 ## Gotchas
 
 - Chromium is on `PATH` on this host but devenv does not provide it: `doctor.sh` and `page.sh` need it; the browser tool brings its own.
 - `vp preview` serves `apps/editor/dist`: a stale `dist` is rebuilt by launch in preview mode; in `dev` mode no build runs.
 - The dev server prints `[foldkit] No response from @foldkit/vite-plugin` in the console: the plugin is off by decision (spec 0000, Revisions). Any other warning is new.
-- `/favicon.ico` answers 404: the app ships none. A different 404 is broken.
+- `/favicon.ico` may be requested and answers 404: the app ships none (a browser that cached the 404 does not ask again, so a run may show it or not). A different 404 is broken.
 - Hooks: `bun install` runs `prepare` (`vp config`, `effect-tsgo patch`) as in any checkout. Never commit with `--no-verify`.

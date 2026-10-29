@@ -9,7 +9,7 @@ Read `README.md` first: preconditions, the evidence rules and how the entries ar
 Spec: 0000
 Observes: spec 0000 "Not gated, observed once" (the built editor loads in a browser on Effect 4.1.0 with Foldkit 0.169.0); the boot test pins the same in happy-dom.
 
-- **Observe.** `scripts/doctor.sh` prints `DOCTOR OK`. In a browser tab on `<origin>/` (wait for network idle): the title is `reebeat studio`; `tab.errors()` holds no entry; every request goes to `<origin>` and answers 2xx or 304, except `/favicon.ico` (404 at `bdb3a01`: the app ships no favicon; a different 404 is broken). `tab.console()` is empty in preview; in `dev` it holds only the two `[vite]` debug lines and the `[foldkit] No response from @foldkit/vite-plugin` warning (the plugin is off by decision, spec 0000 Revisions).
+- **Observe.** `scripts/doctor.sh` prints `DOCTOR OK`. In a browser tab on `<origin>/` (wait for network idle): the title is `reebeat studio`; `tab.errors()` holds no entry; every request goes to `<origin>` and answers 2xx or 304, except a possible `/favicon.ico` (404: the app ships no favicon; a browser that cached the 404 does not ask again; a different 404 is broken). `tab.console()` is empty in preview; in `dev` it holds only the two `[vite]` debug lines and the `[foldkit] No response from @foldkit/vite-plugin` warning (the plugin is off by decision, spec 0000 Revisions).
 - **Broken when.** The title differs, the page is blank (the doctor's `h1` check fails), an error or any other console entry appears, a request leaves the origin (the free journey needs no network), or an asset answers 4xx or 5xx.
 - **Evidence.** `notes-browser-drive.json` (title, errors, console, requests), `serve.log`.
 
