@@ -6,7 +6,7 @@ An entry is a level-3 heading that opens with its id in backticks, then a `Spec:
 
 ## Features
 
-- [The editor shell](./shell.md) (spec 0000): `shell-load`, `shell-regions`, `shell-inspector-toggle`, `shell-layout`, `shell-build`.
+- [The editor shell](./shell.md) (specs 0000 and 0005): `shell-load`, `shell-dev-reload` (dev only), `shell-regions`, `shell-inspector-toggle`, `shell-layout`, `shell-build`.
 
 ## Planned, not built (no entry yet)
 
