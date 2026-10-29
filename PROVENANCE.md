@@ -18,7 +18,7 @@ The development lifecycle (spec 0000) is copied from [`reebeat/reebeat`](https:/
 | `tools/quality/package.json` | same path | name `@reebeat-studio/quality`; the `@reebeat/core` dependency removed |
 | `tools/oxlint/anti-slop/**` | same path | identical; `UPSTREAM.txt` keeps the chain (dmmulroy/anti-slop `c44ef22`, mono-web `2aa6ce9`, the donor) |
 | `vite.config.ts` | same path | the Effect groups and the per-file overrides of reebeat's packages replaced by this repository's; the Foldkit plugin rules added for `apps/editor`; `eslint/no-redeclare` off for `apps/editor/src`; `@reebeat/` import patterns renamed `@reebeat-studio/` |
-| `package.json` | same path | name, workspaces (`apps/*`, `tools/*`), scripts (`build` added; `check:tiers` and `journey` dropped; `ready` adjusted), `catalog` cut to what this repository uses plus `foldkit`, `@foldkit/ui`, `@foldkit/oxlint-plugin`, `happy-dom`, `tailwindcss`, `@tailwindcss/vite`; `overrides` for `@effect/platform-node` and `-node-shared` |
+| `package.json` | same path | name, workspaces (`apps/*`, `tools/*`), scripts (`build` added; `check:tiers` and `journey` dropped; `ready` adjusted), `catalog` cut to what this repository uses plus `foldkit`, `@foldkit/ui`, `@foldkit/vite-plugin`, `@foldkit/oxlint-plugin`, `happy-dom`, `tailwindcss`, `@tailwindcss/vite`; `overrides` for `@effect/platform-node` and `-node-shared` |
 | `.gitleaks.toml` | same path | the speech-cache allowlist removed |
 | `knip.json` | same path | rewritten for `apps/editor` and `tools/quality` |
 | `devenv.nix` | same path | no Chromium, ffmpeg or whisper-cpp, no `REEBEAT_CHROMIUM` |

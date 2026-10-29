@@ -10,7 +10,6 @@ Next:
 
 - Review spec 0003 (review, PR creation and verification skills; PR #5, targets `main`), then merge it with `merge.sh` once a round passes.
 - Spec 0001 starts when reebeat's story IR is stable (0004 merged, 0005 done, 0006 makes the committed story source the IR JSON). Until then no editing feature is built against the IR.
-- Follow-up to 0000: re-enable `@foldkit/vite-plugin` when a release imports `effect/crypto` (issue #4), and drop the Effect 4.0.0 peer note then (see `AGENTS.md`, "Effect and Foldkit").
 - Keep `verify-studio`'s feature map true: the PR that builds spec 0001 (or any user-visible feature) adds its entries in the same PR (`AGENTS.md`, maintenance rule).
 
 Blocked:

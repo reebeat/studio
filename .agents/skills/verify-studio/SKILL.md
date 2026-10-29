@@ -133,6 +133,6 @@ Exercised on 2026-10-29 (spec 0003): launch in preview and in dev from a fresh w
 
 - Chromium is on `PATH` on this host but devenv does not provide it: `doctor.sh` and `page.sh` need it; the browser tool brings its own.
 - `vp preview` serves `apps/editor/dist`: a stale `dist` is rebuilt by launch in preview mode; in `dev` mode no build runs.
-- The dev server prints `[foldkit] No response from @foldkit/vite-plugin` in the console: the plugin is off by decision (spec 0000, Revisions). Any other warning is new.
+- The dev server prints `[foldkit:devTools] MCP relay listening at ws://127.0.0.1:<port>/__foldkit/devtools-mcp` and, per page load, `runtime connected` / `runtime disconnected`. The relay is loopback and token-guarded; never expose it. A `[foldkit] No response from @foldkit/vite-plugin` warning in the browser console means the plugin is not loaded: that is a finding (spec 0005).
 - `/favicon.ico` may be requested and answers 404: the app ships none (a browser that cached the 404 does not ask again, so a run may show it or not). A different 404 is broken.
 - Hooks: `bun install` runs `prepare` (`vp config`, `effect-tsgo patch`) as in any checkout. Never commit with `--no-verify`.

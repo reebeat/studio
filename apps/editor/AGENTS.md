@@ -16,4 +16,4 @@ The subtree was not vendored: `repos/foldkit` is a large public repository and t
 - `src/main.ts` holds the pure definitions (Model, Message, init, update, view); `src/entry.ts` is the only module that boots the runtime. Tests are `src/story.test.ts` (drives `update`) and `src/scene.test.ts` (drives the view).
 - The repository formats with Oxfmt (double quotes, semicolons) and lints with the Foldkit plugin; the generated files were reformatted, not hand-edited for style.
 - Import `describe`, `test` and `expect` from `vite-plus/test`, not `vitest` (lint rule `vite-plus/prefer-vite-plus-imports`).
-- No `@foldkit/vite-plugin`: see the comment in `vite.config.ts`.
+- `@foldkit/vite-plugin` is on in `vite.config.ts` (spec 0005): in `vp dev` it keeps the Model across the reload a saved file causes and opens the devtools relay.
