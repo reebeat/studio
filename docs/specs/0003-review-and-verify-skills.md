@@ -1,7 +1,7 @@
 # 0003 Review, PR creation and verification skills
 
 Status: **spec** (frozen when its PR opens). Date: 2026-10-29. Decided by: the operator's assignment of 2026-10-29 (adopt vektorprogrammet-reimagined's PR-creation and PR-review procedures in reebeat and reebeat studio, personalised, and keep a verification skill for each repository).
-Process: [spec 0000](0000-development-lifecycle.md). Stacked on PR #1 (spec 0000), because the skills this spec changes arrive with it.
+Process: [spec 0000](0000-development-lifecycle.md). Built on the branch of PR #1 (spec 0000), whose skills it changes; PR #1 was squash-merged as `b26c1cc` and this branch was rebased onto `main` (the trees of `643096e` and `b26c1cc` are identical).
 Verify skill: none, process and skills only; its own proof is the verification run recorded in the PR body (see "Falsifiers", F6).
 
 ## Problem
@@ -104,3 +104,9 @@ Granularity: one spec, one answer. Finer (every journey heading, every falsifier
 Dated entries. A spec is revised only here; its text above is never edited silently after the PR opens.
 
 - **2026-10-29, plan written** with the build.
+- **2026-10-29, build deviations (none changes the journey or a falsifier).**
+  1. **Donor diff.** The donor's `review-pr` directory differs from the copy of `797e9e4` only in `SKILL.md` (the plan, code and agreement brief, which reebeat spec 0000 had already ported); `merge.sh` and `record-round.sh` are identical. So the port adds the verification reviewer, the `maintenance` finding and the tree check after a rebase, and the lessons of the day are what is new.
+  2. **`reviewers.md`.** The reviewer briefs and the severity table moved from `SKILL.md` into `.agents/skills/review-pr/reviewers.md` so that `SKILL.md` stays the loop and each reviewer reads only its brief (skill `writing-for-agents`).
+  3. **Spec numbers.** `0003` is this spec; spec 0002 is the collaboration spike in PR #3, which has no `Verify skill:` line yet. The test will fail there after this PR merges until that spec says `Verify skill: none, spike` (Risks). The distribution spec moved to 0004.
+  4. **F6 evidence.** The run was made on `bdb3a01` (PR #1's head when the skill was first run) and again on `643096e` (its head after round 2). The OMP `browser` tool's `tab.screenshot({ path })` writes to `/tmp`, so the skill saves screenshots with `page.screenshot` through `tab.run`; the skill says so.
+  5. **Controls on a scratch worktree.** The two F6 controls (an `update` that ignores the toggle; an `h1` turned into a `p`) were applied to a detached worktree of `643096e` and reverted; nothing was committed.
