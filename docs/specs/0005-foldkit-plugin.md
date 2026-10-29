@@ -29,14 +29,14 @@ A developer runs `devenv shell -- bun run dev` (or the verify skill starts `vp d
 
 | # | Claim | Negative control | Observation |
 | --- | --- | --- | --- |
-| F1 | The installed versions are Foldkit 0.170.0, `@foldkit/ui` 0.170.0, plugin 0.29.0, effect 4.1.0, and `bun install` prints no peer warning for them | the same install with the plugin pinned at 0.28.0 | `bun install` output and the installed `package.json` of each |
-| F2 | `vp dev` loads the config with the plugin on effect 4.1.0 and prints the relay line | plugin 0.28.0 | the server log; the control prints `does not provide an export named 'Crypto'` |
+| F1 | The installed versions are Foldkit 0.170.0, `@foldkit/ui` 0.170.0, plugin 0.29.0, effect 4.1.0, and a **fresh resolution** prints no `incorrect peer dependency` warning | the same resolution on `main`, which prints 3 (Revision 6) | `bun install --lockfile-only --ignore-scripts` on a copy of every `package.json` without `bun.lock`; the installed `package.json` of each |
+| F2 | The plugin loads on effect 4.1.0 and `vp dev` prints the relay line | plugin 0.28.0 in a scratch project fails on `Crypto` (Revision 6) | `bun -e "await import('@foldkit/vite-plugin')"`; the server log |
 | F3 | In a real browser on `vp dev`: title, regions, no error, no `No response from @foldkit/vite-plugin` warning | plugin line removed from the config | `tab.console()` and `tab.errors()`; the control shows the warning |
 | F4 | Model preservation: hide the Inspector, edit `main.ts`, the document reloads, the new text shows and the Inspector stays hidden | plugin line removed | the DOM after the edit; the control shows it shown again (Revision 2) |
 | F5 | `vp build` and `vp preview` pass; the preview journey (toggle) is unchanged | none: the same shell test as before | `bun run ready` and the verify skill in `preview` mode |
 | F6 | The plugin imports `SecureRandom` from `effect/crypto`, not a root `Crypto` | read `dist/index.js` of the tarball | the grep output |
 | F7 | No file still says the plugin is off | grep | `grep -rn "No response from\|plugin off\|not used\|issues/4"` outside specs |
-| F8 | `bun run ready` exits 0 on the head | any gate red | the transcript |
+| F8 | `bun run ready` exits 0 on the head, and the verify runs cited in the PR record that head with a clean tree | any gate red; a run on another commit or a dirty tree is not evidence | the transcript; each run's `REPORT.md` (`commit:` and `git-status.txt`) |
 
 ## Feature map
 
@@ -49,3 +49,9 @@ A developer runs `devenv shell -- bun run dev` (or the verify skill starts `vp d
 3. **2026-10-29, the feature map section replaces "Verify skill".** The featureMap test rejects a `Verify skill:` line in a spec that an entry names; the header line and the section now say which entries name this spec.
 4. **2026-10-29, the plugin also brands views.** Its README: at build time, in dev and production, it wraps every view-function return in the application modules with a view identity. The production bundle is therefore produced by the plugin as well (`vp build`: 300.24 kB js, 99.02 kB gzip; no baseline of the previous bundle was measured). The Vitest run loads the plugin through the same config and passes (45 + 8 tests).
 5. **2026-10-29, no `.mcp.json`.** The generator wired the Foldkit devtools MCP (`@foldkit/devtools-mcp`, 0.26.0 now) in a `.mcp.json` that spec 0000 did not copy; the relay is now live in `vp dev`, but no MCP client config is added here. Open question 1 of spec 0000 (an agent-inspectable dev server) stays for the operator.
+6. **2026-10-29, round 1 (RevStudio5, changes) and the controls that can fail.**
+   - F1's first check (`bun install --frozen-lockfile`) cannot fail: it prints 0 peer warnings on `main` too. A fresh resolution discriminates. Command, run on a copy of every `package.json` of the tree (no `bun.lock`): `bun install --lockfile-only --ignore-scripts 2>&1 | grep -c "incorrect peer dependency"`. Observed: `main` (`d4fd75e`) 3, the head 0.
+   - F2's control, run now: in a scratch project with `effect@4.1.0`, `@effect/platform-node@4.1.0`, `@effect/platform-node-shared@4.1.0`, `foldkit@0.170.0`, `vite@8` and the plugin, `bun -e "await import('@foldkit/vite-plugin')"`. Plugin 0.28.0: `SyntaxError: Export named 'Crypto' not found in module '.../effect/dist/index.js'`. Plugin 0.29.0: `LOADED`.
+   - The verify skill's path table now selects `shell-dev-reload` (in `dev`) for a change to `vite.config.ts`, `package.json`, `bun.lock` or a Foldkit or Effect version; the index of `features/README.md` and the count in `shell.md` (six entries) are corrected.
+   - The verify runs cited in the PR body are re-made on a clean tree at the head (F8 says so).
+   - `STATE.md` says spec 0003 is merged and spec 0005 is in review. The PR body's Merge danger states the real conflict with PR #6 (the Revisions of spec 0000 and the shared files) and the order: #9 first, #6 rebased after it.

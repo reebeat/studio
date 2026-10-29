@@ -102,8 +102,8 @@ Stop the supervised launch (OMP: kill the named bash job) or let `scripts/cleanu
 
    | Changed path | Drive |
    | --- | --- |
-   | `apps/editor/src/{main,application,entry}.ts`, `index.html`, `styles.css`, `apps/editor/vite.config.ts` | every `shell-*` entry, in preview; `shell-load` and `shell-inspector-toggle` again in `dev` |
-   | `package.json`, `apps/editor/package.json`, `bun.lock`, root `vite.config.ts`, an Effect or Foldkit version | `shell-build`, `shell-load`, `shell-inspector-toggle`: a version bump that breaks the boot shows only in a browser |
+   | `apps/editor/src/{main,application,entry}.ts`, `index.html`, `styles.css`, `apps/editor/vite.config.ts` | every `shell-*` entry in preview (`shell-dev-reload` runs only in `dev`); `shell-load`, `shell-inspector-toggle` and `shell-dev-reload` in `dev` |
+   | `package.json`, `apps/editor/package.json`, `bun.lock`, root `vite.config.ts`, an Effect or Foldkit version (or the Foldkit plugin) | `shell-build`, `shell-load`, `shell-inspector-toggle` in preview and `dev`, and `shell-dev-reload` in `dev`: a version bump that breaks the boot shows only in a browser |
    | `devenv.nix` | `shell-build` |
    | a new feature under `apps/editor/src` | its new entries (added in the same PR) plus every `shell-*` entry |
    | `apps/editor/src/*.test.ts`, `testModels.ts`, `vitestSetup.ts` | nothing to drive; check that the behaviour a test now pins is in the map |

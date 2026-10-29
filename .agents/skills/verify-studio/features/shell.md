@@ -1,6 +1,6 @@
 # The editor shell (spec 0000)
 
-A placeholder by design: a heading, three regions, an Inspector aside and one button. It edits nothing and reads no story. These five entries are everything a person can do or see today; each says how to observe it and what counts as broken. A feature that is observable only in code (the pure `update`) is pinned by the Story and Scene tests in `apps/editor/src`, not here.
+A placeholder by design: a heading, three regions, an Inspector aside and one button. It edits nothing and reads no story. These six entries (one of them, `shell-dev-reload`, only in `dev`) are everything a person can do or see today; each says how to observe it and what counts as broken. A feature that is observable only in code (the pure `update`) is pinned by the Story and Scene tests in `apps/editor/src`, not here.
 
 Read `README.md` first: preconditions, the evidence rules and how the entries are used. `<origin>` and `<run>` come from `scripts/launch.sh` (`state.env`).
 
