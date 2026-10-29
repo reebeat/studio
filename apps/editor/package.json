@@ -16,6 +16,7 @@
     "foldkit": "catalog:"
   },
   "devDependencies": {
+    "@effect/vitest": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "happy-dom": "catalog:",
     "tailwindcss": "catalog:",

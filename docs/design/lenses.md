@@ -4,7 +4,7 @@ Status: **design only, nothing is built**. Date: 2026-10-29. Direction: the oper
 
 ## The idea
 
-A story goes through phases: you write it, you lay out its scenes, you record the voice, you fine-tune the timing, you check it, you ship it. DaVinci Resolve organises its editor in "pages" (Media, Cut, Edit, Fusion, Color, Fairlight, Deliver), so that each page shows only what fits the phase of the work. Studio does the same with **lenses**. A lens is a way of looking at the same story. It is not a separate document, and switching lens never changes the story. All lenses read and write one story (the story IR from reebeat), and every change any lens makes is the same kind of edit: a JSON Patch (spec 0001).
+A story goes through phases: you write it, you lay out its scenes, you record the voice, you fine-tune the timing, you check it, you ship it. DaVinci Resolve organises its editor in "pages" (Media, Cut, Edit, Fusion, Color, Fairlight, Deliver), so that each page shows only what fits the phase of the work. Studio does the same with **lenses**. A lens is a way of looking at the same story. It is not a separate document, and switching lens never changes the story. All lenses read and write one story (the story IR from reebeat), and every change any lens makes is the same kind of edit, described as a JSON Patch (spec 0001). A patch only **describes** an edit (for an agent's tool call, for review, for undo): what peers exchange is the Loro update, and the sync server gates that a merged story is valid. That is spec 0001's Revision of 2026-10-29.
 
 Three things are always present, whatever the lens: the **preview** (the story playing at the playhead), the **playhead**, and the **agent panel** (lens 10).
 

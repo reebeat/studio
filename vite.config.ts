@@ -1,4 +1,4 @@
-// Provenance: adapted from phibkro/reebeat @ f7c348877585f54b6bf00651608726dd7e5044d3 (vite.config.ts), which adapted it from
+// Provenance: adapted from reebeat/reebeat @ f7c348877585f54b6bf00651608726dd7e5044d3 (vite.config.ts), which adapted it from
 // phibkro/vektorprogrammet-reimagined @ 797e9e41d96194b9479ff224ac1c40bbc0545888. Deviations: the Effect groups and the
 // per-file overrides of reebeat's packages are replaced by this repository's own (apps/editor, tools/quality), and the
 // Foldkit Oxlint plugin rules apply to apps/editor. See PROVENANCE.md.

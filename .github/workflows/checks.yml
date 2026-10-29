@@ -1,4 +1,4 @@
-# Provenance: adapted from phibkro/reebeat @ f7c348877585f54b6bf00651608726dd7e5044d3 (.github/workflows/checks.yml),
+# Provenance: adapted from reebeat/reebeat @ f7c348877585f54b6bf00651608726dd7e5044d3 (.github/workflows/checks.yml),
 # which adapted it from phibkro/vektorprogrammet-reimagined @ 797e9e41d96194b9479ff224ac1c40bbc0545888.
 # Deviations: no Chromium sandbox variable, package-tier step or journey step (this repository has neither); a build step.
 # Each step calls the root script of the same name (`bun run ready` is their sequence), never its command.

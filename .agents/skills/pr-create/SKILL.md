@@ -3,7 +3,7 @@ name: pr-create
 description: "Open a reebeat studio pull request: the PR body is the report, in eight fixed sections, and the PR opens only when the whole journey is built and `bun run ready` passed on the head. Use when a spec's code is finished and a PR is to be opened, or when drafting a PR body for this repository."
 ---
 
-<!-- Provenance: copied from phibkro/reebeat @ f7c348877585f54b6bf00651608726dd7e5044d3 (.agents/skills/pr-create/SKILL.md).
+<!-- Provenance: copied from reebeat/reebeat @ f7c348877585f54b6bf00651608726dd7e5044d3 (.agents/skills/pr-create/SKILL.md).
      Deviations: the description names this repository; "the terms of `GLOSSARY.md`" points at reebeat's glossary (see PROVENANCE.md).
      Credits: builds on the machine skill `pr` (`skill://pr`), whose Summary, Evidence
      and Merge Danger sections it reuses; the Summary's menu of visuals comes from Dex Horthy's `show-me` skill
