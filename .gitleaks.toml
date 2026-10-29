@@ -1,0 +1,7 @@
+# Provenance: adapted from phibkro/reebeat @ f7c348877585f54b6bf00651608726dd7e5044d3 (.gitleaks.toml), which adapted it
+# from phibkro/vektorprogrammet-reimagined @ 797e9e41d96194b9479ff224ac1c40bbc0545888 (.gitleaks.toml).
+# Deviation: default rules only; reebeat's allowlist for its speech cache files is dropped (this repository has none).
+title = "reebeat studio secret checks"
+
+[extend]
+useDefault = true

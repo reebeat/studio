@@ -1,0 +1,20 @@
+{
+  "source": "https://github.com/phibkro/vektorprogrammet-reimagined",
+  "commit": "797e9e41d96194b9479ff224ac1c40bbc0545888",
+  "path": "tools/oxlint/anti-slop",
+  "via": {
+    "source": "https://github.com/vektorprogrammet/mono-web",
+    "commit": "2aa6ce9733cf6255bd330ff2f23ea958d939c57d",
+    "path": "tools/oxlint/anti-slop"
+  },
+  "upstream": {
+    "source": "https://github.com/dmmulroy/anti-slop",
+    "commit": "c44ef22ca116d0ba62a3ff663a0bd13a3f3fa40b"
+  },
+  "deviations": [
+    "Retained upstream UPSTREAM.txt (rewritten for this chain), MIT licences and the generic and Effect rule sources; the local plugins use Vite+'s bundled vite-plus/lint/plugins API instead of a separately pinned oxlint.",
+    "Dropped the donor's domain rules: no-dev-server, no-implicit-date-time-zone, no-multi-statement-unsafe, no-owned-table-write, no-unkeyed-command-row, no-zoneless-calendar-interval, with their tests and the donor's tools/oxlint/package.json.",
+    "Renamed the generic plugin from vektor-anti-slop to reebeat-anti-slop; it is not loaded by the root configuration because Ultracite's anti-slop preset enables the identical 18 rules.",
+    "Only the five Effect rules (effect/index.ts) are loaded and enabled at error."
+  ]
+}
