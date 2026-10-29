@@ -1,0 +1,22 @@
+a1 | naive ✓✓✓ cell=br | keyed ✓✓✓ cell=br | converged true
+a2 | naive ✓✓✓ at=(0.1, 0.9) MIXED (a position neither user chose) | keyed ✓✓✓ at=(0.1, 0.9) MIXED (a position neither user chose) | converged true
+a4 | naive ✗✗✓ scenes=[sc1,sc2,sc3,sc4,sc7,sc5,sc7,sc6] / scenes=[sc1,sc2,sc3,sc4,sc5,sc7,sc6] | keyed ✓✓✓ scenes=[sc1,sc2,sc3,sc4,sc5,sc7,sc6] | converged true
+a3 | naive ✓✓✓ at=(0.9, 0.9) | keyed ✓✓✓ at=(0.9, 0.9) | converged true
+b1 | naive ✓✓✓ tag deleted (colour edit lost) | keyed ✓✓✓ tag deleted (colour edit lost) | converged true
+b2 | naive ✗✗✗ tag absent, f9 targets tag | keyed ✗✗✗ tag absent, f9 targets tag | converged true
+c1 | naive ✓✓✓ effects=[s1,sA,sB,s2,f1,r1] / effects=[s1,sB,sA,s2,f1,r1] | keyed ✓✓✓ effects=[s1,sA,sB,s2,f1,r1] | converged true
+b3 | naive ✗✗✓ note kept, text=replaced / note deleted (replacement lost) | keyed ✗✗✓ note kept, text=replaced / note deleted (replacement lost) | converged true
+c2 | naive ✗✗✗ effects=[s1,s9,s9,s2,f1,r1] | keyed ✗✗✗ effects=[s1,s9,s9,s2,f1,r1] | converged true
+c4 | naive ✓✓✓ effects=[s1,a1,a2,a3,b1,b2,b3,s2] / effects=[s1,b1,b2,b3,a1,a2,a3,s2] | keyed ✓✓✓ effects=[s1,a1,b1,a2,b2,a3,b3,s2] | converged true
+c3 | naive ✗✗✗ p=q, q=p | keyed ✗✗✗ p=q, q=p | converged true
+d1 | naive ✗✗✗ f9 targets one; sc4 elements=[cube,tag,hint,note] | keyed ✓✓✓ f9 targets cube; sc4 elements=[cube,tag,hint,note] | converged true
+d2 | naive ✗✗✗ z anchors to one; sc5 elements=[cube,hint,three] | keyed ✓✓✓ z anchors to cube; sc5 elements=[cube,hint,three] | converged true
+d3 | naive ✓✓✓ identity sc3:cube sc4:cube sc5:cube sc6:gone sc7:one | keyed ✓✓✓ identity sc3:cube sc4:cube sc5:cube sc6:gone sc7:cube | converged true
+d4 | naive ✗✗✗ sc4 elements=[box2,box2,hint,note] | keyed ✗✗✗ sc4 elements=[box2,box2,hint,note] | converged true
+e1 | naive ✗✗✗ t=[0,0.6,0.4,1] | keyed ✓✓✓ t=[0,0.4,0.6,1] | converged true
+e2 | naive ✗✗✗ t=[0,0.6,0.5,0.7,1] | keyed ✓✓✓ t=[0,0.5,0.6,0.7,1] | converged true
+e3 | naive ✓✓✓ points=[{"t":0.5,"v":0.9}] | keyed ✓✓✓ points=[{"t":0.5,"v":0.9}] | converged true
+e4 | naive ✗✗✗ t=[0,0.5,0.5,1] | keyed ✗✗✗ t=[0,0.5,0.5,1] | converged true
+runs 114, converged 114, valid 66 (naive 26 of 57, keyed 40 of 57)
+naive: runs 57, invalid as merged 31, valid after repair 26, still invalid after repair: b3/yjs,b3/automerge,d4/yjs,d4/automerge,d4/loro; gate refused an edit in 31 of 31 invalid, false refusals 0
+keyed: runs 57, invalid as merged 17, valid after repair 15, still invalid after repair: b3/yjs,b3/automerge; gate refused an edit in 17 of 17 invalid, false refusals 0

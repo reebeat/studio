@@ -1,0 +1,5 @@
+yjs: worker.js 81329 B raw, 25193 B gzip
+automerge: worker.js 49059 B raw, 10097 B gzip
+loro: worker.js 86719 B raw, 13112 B gzip
+automerge: automerge_wasm_bg.wasm 3644225
+loro: loro_wasm_bg.wasm 3595346

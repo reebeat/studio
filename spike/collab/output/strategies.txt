@@ -1,0 +1,152 @@
+
+== a1: move the same element to different cells (cell, an enum)
+  naive yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== a2: move one element along x (user A) and along y (user B): property-wise merge
+  naive yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== a4: reorder: both move scene `sc7` (a title card) to different places: before sc5, and before sc6
+  naive yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop duplicate scene sc7
+  naive automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop duplicate scene sc7
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== a3: move the same element to different (x, y), edited as one atomic value
+  naive yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== b1: one deletes element `tag` (with its dependants), the other edits its colour (class)
+  naive yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== b2: one deletes element `tag` (with its dependants), the other adds an effect that targets it
+  naive yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop effect sc4/f9 (dangling reference)
+  naive automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop effect sc4/f9 (dangling reference)
+  naive loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop effect sc4/f9 (dangling reference)
+  keyed yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop effect sc4/f9 (dangling reference)
+  keyed automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop effect sc4/f9 (dangling reference)
+  keyed loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop effect sc4/f9 (dangling reference)
+
+== c1: both insert an effect at index 1 (different ids)
+  naive yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== b3: one deletes element `note` (with its dependants), the other replaces the whole `note` record
+  naive yjs       merged:INVALID repaired:INVALID reject(A first)->B reject(B first)->A  
+  naive automerge merged:INVALID repaired:INVALID reject(A first)->B reject(B first)->A  
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:INVALID repaired:INVALID reject(A first)->B reject(B first)->A  
+  keyed automerge merged:INVALID repaired:INVALID reject(A first)->B reject(B first)->A  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== c2: both insert an effect at index 1, and both picked the next free id `s9`
+  naive yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  rename duplicate effect sc4/s9 to s9~2
+  naive automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  rename duplicate effect sc4/s9 to s9~2
+  naive loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  rename duplicate effect sc4/s9 to s9~2
+  keyed yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  rename duplicate effect sc4/s9 to s9~2
+  keyed automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  rename duplicate effect sc4/s9 to s9~2
+  keyed loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  rename duplicate effect sc4/s9 to s9~2
+
+== c4: both insert a run of three effects at index 1 (does the merge keep each run together?)
+  naive yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== c3: derived events p and q: one anchors p to q, the other anchors q to p (a cycle)
+  naive yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  break cycle p->q by dropping event q; drop event sc4/p (dangling reference)
+  naive automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  break cycle p->q by dropping event q; drop event sc4/p (dangling reference)
+  naive loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  break cycle p->q by dropping event q; drop event sc4/p (dangling reference)
+  keyed yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  break cycle p->q by dropping event q; drop event sc4/p (dangling reference)
+  keyed automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  break cycle p->q by dropping event q; drop event sc4/p (dangling reference)
+  keyed loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  break cycle p->q by dropping event q; drop event sc4/p (dangling reference)
+
+== d1: one renames element `one` to `cube` everywhere, the other adds an effect that targets `one`
+  naive yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop effect sc4/f9 (dangling reference)
+  naive automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop effect sc4/f9 (dangling reference)
+  naive loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop effect sc4/f9 (dangling reference)
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== d2: one renames `one` to `cube`, the other adds an event anchored to `one.move.end` in sc5
+  naive yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop event sc5/z (dangling reference)
+  naive automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop event sc5/z (dangling reference)
+  naive loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  drop event sc5/z (dangling reference)
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== d3: one renames `one` to `cube` everywhere, the other adds a new element `one` to sc7
+  naive yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== d4: one renames `one` to `box2`, the other renames `tag` to `box2` (same scene)
+  naive yjs       merged:INVALID repaired:INVALID reject(A first)->B reject(B first)->A  rename duplicate element sc3/box2 to box2~2; rename duplicate element sc4/box2 to box2~2
+  naive automerge merged:INVALID repaired:INVALID reject(A first)->B reject(B first)->A  rename duplicate element sc3/box2 to box2~2; rename duplicate element sc4/box2 to box2~2
+  naive loro      merged:INVALID repaired:INVALID reject(A first)->B reject(B first)->A  rename duplicate element sc3/box2 to box2~2; rename duplicate element sc4/box2 to box2~2
+  keyed yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  
+  keyed automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  
+  keyed loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  
+
+== e1: curve points: one moves p1 (t .3 to .6), the other moves p2 (t .7 to .4): they cross
+  naive yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  naive automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  naive loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== e2: curve points: one moves p1 (t .3 to .6), the other inserts a point at t=.5 after p1
+  naive yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  naive automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  naive loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== e3: curve points: one sets p1.v = .9, the other sets p1.t = .5 (same point, different fields)
+  naive yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  naive loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed yjs       merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed automerge merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+  keyed loro      merged:valid   repaired:valid   reject(A first)->- reject(B first)->-  
+
+== e4: curve points: both move a different point to t=.5 (a tie)
+  naive yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  naive automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  naive loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  keyed yjs       merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  keyed automerge merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity
+  keyed loro      merged:INVALID repaired:valid   reject(A first)->B reject(B first)->A  normalise curve sc4/one.opacity

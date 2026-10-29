@@ -1,0 +1,6 @@
+yjs.js: 64165 B raw, 19679 B gzip -9, 17651 B brotli -q11
+am-slim.js: 28448 B raw, 7114 B gzip -9, 6255 B brotli -q11
+am-full.js: 45541 B raw, 9159 B gzip -9, 7428 B brotli -q11
+loro-web.js: 70373 B raw, 7883 B gzip -9, 6836 B brotli -q11
+automerge.wasm (3644225 B on disk): 3644225 B raw, 1137121 B gzip -9, 792564 B brotli -q11
+loro_wasm_bg.wasm (3595346 B on disk): 3595346 B raw, 1194512 B gzip -9, 841433 B brotli -q11

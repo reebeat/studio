@@ -1,0 +1,68 @@
+== npm view yjs
+version = '13.6.33'
+license = 'MIT'
+dist.unpackedSize = 2308376
+time.modified = '2026-09-23T16:37:57.188Z'
+== npm view @automerge/automerge
+version = '3.5.0'
+license = 'MIT'
+dist.unpackedSize = 47529812
+time.modified = '2026-09-16T15:07:20.839Z'
+== npm view @automerge/automerge-repo
+version = '2.6.0-alpha.3'
+license = 'MIT'
+dist.unpackedSize = 1740543
+time.modified = '2026-10-13T13:48:33.009Z'
+== npm view loro-crdt
+version = '1.17.1'
+license = 'MIT'
+dist.unpackedSize = 21903342
+time.modified = '2026-10-22T16:52:09.906Z'
+== npm view y-partyserver
+version = '2.2.0'
+license = 'ISC'
+dist.unpackedSize = 191685
+time.modified = '2026-04-24T20:17:18.345Z'
+== npm view partyserver
+version = '0.5.10'
+license = 'ISC'
+dist.unpackedSize = 143046
+time.modified = '2026-08-03T15:17:49.231Z'
+== npm view loro-websocket
+version = '0.6.2'
+license = 'MIT'
+dist.unpackedSize = 404456
+time.modified = '2026-01-04T04:16:26.764Z'
+== gh api repos/yjs/yjs (full_name, license, stars, created, pushed)
+yjs/yjs	NOASSERTION	22994	2014-07-29	2026-10-23
+== gh api repos/automerge/automerge (full_name, license, stars, created, pushed)
+automerge/automerge	MIT	6696	2019-12-26	2026-10-26
+== gh api repos/automerge/automerge-repo (full_name, license, stars, created, pushed)
+automerge/automerge-repo	MIT	716	2022-05-02	2026-10-28
+== gh api repos/loro-dev/loro (full_name, license, stars, created, pushed)
+loro-dev/loro	MIT	6258	2022-07-12	2026-10-23
+== gh api repos/loro-dev/protocol (full_name, license, stars, created, pushed)
+loro-dev/protocol		41	2025-08-29	2026-09-30
+== gh api repos/cloudflare/partykit (full_name, license, stars, created, pushed)
+cloudflare/partykit	ISC	1301	2024-05-27	2026-08-03
+== gh api repos/napolab/y-durableobjects (full_name, license, stars, created, pushed)
+napolab/y-durableobjects	MIT	256	2023-12-30	2026-08-14
+== latest releases of yjs/yjs
+v14.0.0-rc.29	2026-10-15
+v14.0.0-rc.28	2026-09-29
+v13.6.33	2026-09-23
+== latest releases of automerge/automerge
+js/automerge-3.5.0	2026-09-16
+js/automerge-3.4.1	2026-08-12
+js/automerge-3.4.0	2026-07-31
+== latest releases of loro-dev/loro
+loro.js@0.4.0	2026-10-22
+loro-crdt@1.17.1	2026-10-22
+loro-crdt@1.17.0	2026-10-22
+== latest releases of automerge/automerge-repo
+v3.0.0-experimental.2	2026-10-09
+v3.0.0-experimental.1	2026-10-05
+v2.6.0-alpha.5	2026-09-16
+== node_modules/yjs/LICENSE, first lines: The MIT License (MIT) |  | Copyright (c) 2023
+== node_modules/@automerge/automerge/LICENSE, first lines: MIT License |  | Copyright 2022, Ink & Switch LLC
+== node_modules/loro-crdt/LICENSE, first lines: MIT License |  | Copyright (c) 2022 Zixuan Chen

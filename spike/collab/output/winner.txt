@@ -1,0 +1,3 @@
+yjs       A(id 2, 0 prior edits)=tl vs B(id 3)=br -> B wins | A(id 3, 0 prior edits)=tl vs B(id 2)=br -> A wins | A(id 2, 3 prior edits)=tl vs B(id 3)=br -> B wins | A(id 3, 3 prior edits)=tl vs B(id 2)=br -> A wins
+automerge A(id 2, 0 prior edits)=tl vs B(id 3)=br -> B wins | A(id 3, 0 prior edits)=tl vs B(id 2)=br -> A wins | A(id 2, 3 prior edits)=tl vs B(id 3)=br -> A wins | A(id 3, 3 prior edits)=tl vs B(id 2)=br -> A wins
+loro      A(id 2, 0 prior edits)=tl vs B(id 3)=br -> B wins | A(id 3, 0 prior edits)=tl vs B(id 2)=br -> A wins | A(id 2, 3 prior edits)=tl vs B(id 3)=br -> A wins | A(id 3, 3 prior edits)=tl vs B(id 2)=br -> A wins

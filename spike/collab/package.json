@@ -1,0 +1,30 @@
+{
+  "name": "reebeat-studio-collab-spike",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "cases": "bun run src/cases.ts",
+    "summary": "bun run src/summary.ts",
+    "strategies": "bun run src/strategies.ts",
+    "determinism": "bun run src/determinism.ts 10 20",
+    "digest": "bun run src/determinism.ts digest",
+    "winner": "bun run src/winner.ts",
+    "agent": "bun run src/agent.ts",
+    "sizes": "bun run src/sizes.ts",
+    "controls": "bun run src/controls.ts",
+    "bundles": "bun run src/bundles.ts",
+    "worker:build": "bun run worker/build.ts",
+    "worker:e2e": "node --experimental-transform-types worker/e2e.ts",
+    "facts": "bun run src/facts.ts"
+  },
+  "dependencies": {
+    "@automerge/automerge": "3.5.0",
+    "effect": "4.1.0",
+    "fountain-js": "1.2.4",
+    "loro-crdt": "1.17.1",
+    "yjs": "13.6.33"
+  },
+  "devDependencies": {
+    "miniflare": "4.20260730.0"
+  }
+}

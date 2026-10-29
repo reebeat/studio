@@ -1,0 +1,28 @@
+
+### real story (7 scenes)
+model lib       json KiB | save KiB gzip KiB brotli KiB (x json) | build ms load ms json() ms view ms
+naive yjs           8.7 |    10.1     3.9      3.2 (1.16x) |       4    3.07    0.43    0.01
+naive automerge     8.7 |     3.3     3.3      3.2 (0.38x) |   27.57   11.78    0.33       0
+naive loro          8.7 |    13.9    10.3      9.7 (1.60x) |   20.02    2.28    4.66       0
+keyed yjs           9.6 |    11.1     4.2      3.3 (1.15x) |     1.2     1.1    0.15    0.62
+keyed automerge     9.6 |     3.4     3.4      3.4 (0.35x) |   10.84    8.54    0.26    0.29
+keyed loro          9.6 |    15.2    11.2     10.5 (1.58x) |    4.91    2.07     3.1    0.27
+
+### scaled story (210 scenes)
+model lib       json KiB | save KiB gzip KiB brotli KiB (x json) | build ms load ms json() ms view ms
+naive yjs         262.6 |   309.4    71.6     32.8 (1.18x) |   17.57   20.15    3.88       0
+naive automerge   262.6 |    27.2    26.3     25.7 (0.10x) |  209.52  137.51    4.69       0
+naive loro        262.6 |   370.9   218.7    173.3 (1.41x) |  107.52    1.38   30.61    0.01
+keyed yjs         294.7 |   344.8    78.7     36.5 (1.17x) |    12.3   12.64    3.18    2.79
+keyed automerge   294.7 |    28.6    27.6     27.2 (0.10x) |  185.95  138.46    6.62    2.77
+keyed loro        294.7 |   408.3   241.7    186.0 (1.39x) |   75.11    2.14   27.76    2.42
+
+### history growth: 5000 single-field edits on the real story (keyed model)
+yjs       1: 11.1 KiB (state only 11.1) | 100: 11.5 KiB (state only 11.5) | 1000: 15.8 KiB (state only 15.8) | 5000: 34.9 KiB (state only 34.9) | 0.112 ms/edit
+automerge 1: 3.4 KiB | 100: 4.3 KiB | 1000: 8.0 KiB | 5000: 23.2 KiB | 0.428 ms/edit
+loro      1: 15.2 KiB (state only 10.4) | 100: 15.5 KiB (state only 10.3) | 1000: 19.8 KiB (state only 10.3) | 5000: 38.3 KiB (state only 10.3) | 0.769 ms/edit
+
+### merge: replica a imports 300 random ops of replica b (scaled story, keyed model)
+yjs       merge 4.61 ms, update 9.4 KiB
+automerge merge 31.56 ms, update 45.5 KiB
+loro      merge 8.16 ms, update 7.4 KiB

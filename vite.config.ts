@@ -84,7 +84,7 @@ export default defineConfig({
   // Prose is written by hand: Oxfmt re-wraps Markdown and joins hard line breaks, which changes meaning.
   fmt: {
     ...ultraciteFmt,
-    ignorePatterns: [...(ultraciteFmt.ignorePatterns ?? []), "**/*.md"],
+    ignorePatterns: [...(ultraciteFmt.ignorePatterns ?? []), "**/*.md", "spike/**"],
   },
   lint: {
     extends: [core, antiSlop, strict, effectNative],
@@ -92,6 +92,9 @@ export default defineConfig({
     ignorePatterns: [
       ...(core.ignorePatterns ?? []),
       "tools/oxlint/anti-slop/**",
+      // `spike/` holds throwaway measurement code behind a spec's report (spec 0002), not product code: it is not held to
+      // the product's lint, and it is not a workspace. Its provenance and rerun commands are in `spike/collab/README.md`.
+      "spike/**",
     ],
     jsPlugins: [
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },

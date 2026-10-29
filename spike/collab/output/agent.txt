@@ -1,0 +1,61 @@
+
+=== yjs ===
+-- T1 keyed document, JsonPatch.get on the document, agent is a peer
+patch: 4 ops: add effects/agent~0777.1 | replace elements/E:hint/class | replace elements/E:one/cell | replace elements/E:one/curves/opacity/P:sc4:one:opacity:1/v
+merged: converged=true valid=true
+  Y.PermanentUserData on the merged doc: client 777 is "agent:claude-1"
+  agent edits kept: hint.class=accent, opacity={"t":0.3,"v":0.9}, ag1 present=true; human edits kept: tag renamed=true, h1 present=true; conflict one.cell=tl
+  last writer of hint.class (agent only): agent:claude-1
+  last writer of one.cell (both wrote): agent:claude-1
+  last writer of identity name of tag (human only): human:ana
+  last writer of effect ag1 (agent created): agent:claude-1
+  change log: none: Yjs updates carry no message; the client id is the only author mark (Y.PermanentUserData maps it to a user)
+-- T2 IR-level (naive) document
+E1 (rename sound of s2): 1 op: replace effects/1/name
+E2 (insert effect ag1 at 1 of 4): 26 ops: replace 1/id, replace 1/line, replace 1/name, add 1/when/absoluteFlicks, remove 1/when/event, add 1/when/reason, replace 1/written, replace 2/id, replace 2/line, add 2/name, remove 2/target, replace 2/verb, add 2/when/event/anchor, replace 2/when/event/kind, remove 2/when/event/of, remove 2/when/event/offset, replace 2/written, replace 3/id, replace 3/line, replace 3/target, replace 3/verb, replace 3/when/event/of/anchor/edge, replace 3/when/event/of/anchor/phrase, replace 3/when/event/offset/value, replace 3/written, add 4 (everything after the insertion point is rewritten field by field)
+V1 E1 applied by index to the live doc (a human inserted h1 at 0 meanwhile): effects=[h1:pop,s1:pop,s2:ding,f1,r1]  <- s1 got "pop", s2 unchanged; valid=true
+V1 E2 applied by index to the live doc: effect ids=[h1,ag1,s2,f1,r1,r1] valid=false
+V2 E1 applied on the agent's own replica, then merged: effects=[h1:pop,s1:whoosh,s2:pop,f1,r1] valid=true
+V2 E2 applied on the agent's own replica, then merged: effects=[h1:pop,s1:whoosh,ag1:pop,s2:ding,f1,r1] valid=true
+
+=== automerge ===
+-- T1 keyed document, JsonPatch.get on the document, agent is a peer
+patch: 4 ops: add effects/agent~0777.1 | replace elements/E:hint/class | replace elements/E:one/cell | replace elements/E:one/curves/opacity/P:sc4:one:opacity:1/v
+merged: converged=true valid=true
+  agent edits kept: hint.class=accent, opacity={"t":0.3,"v":0.9}, ag1 present=true; human edits kept: tag renamed=true, h1 present=true; conflict one.cell=tl
+  last writer of hint.class (agent only): agent:claude-1
+  last writer of one.cell (both wrote): agent:claude-1
+  last writer of identity name of tag (human only): human:ana
+  last writer of effect ag1 (agent created): agent:claude-1
+  change log: ["1:-","2:-","2:-","2:-","777:agent:claude-1 run 7","777:agent:claude-1 run 7","777:agent:claude-1 run 7","777:agent:claude-1 run 7"]
+-- T2 IR-level (naive) document
+E1 (rename sound of s2): 1 op: replace effects/1/name
+E2 (insert effect ag1 at 1 of 4): 26 ops: replace 1/id, replace 1/line, replace 1/name, add 1/when/absoluteFlicks, remove 1/when/event, add 1/when/reason, replace 1/written, replace 2/id, replace 2/line, add 2/name, remove 2/target, replace 2/verb, add 2/when/event/anchor, replace 2/when/event/kind, remove 2/when/event/of, remove 2/when/event/offset, replace 2/written, replace 3/id, replace 3/line, replace 3/target, replace 3/verb, replace 3/when/event/of/anchor/edge, replace 3/when/event/of/anchor/phrase, replace 3/when/event/offset/value, replace 3/written, add 4 (everything after the insertion point is rewritten field by field)
+V1 E1 applied by index to the live doc (a human inserted h1 at 0 meanwhile): effects=[h1:pop,s1:pop,s2:ding,f1,r1]  <- s1 got "pop", s2 unchanged; valid=true
+V1 E2 applied by index to the live doc: effect ids=[h1,ag1,s2,f1,r1,r1] valid=false
+V2 E1 applied on the agent's own replica, then merged: effects=[h1:pop,s1:whoosh,s2:pop,f1,r1] valid=true
+V2 E2 applied on the agent's own replica, then merged: effects=[h1:pop,s1:whoosh,ag1:pop,s2:ding,f1,r1] valid=true
+
+=== loro ===
+-- T1 keyed document, JsonPatch.get on the document, agent is a peer
+patch: 4 ops: add effects/agent~0777.1 | replace elements/E:hint/class | replace elements/E:one/cell | replace elements/E:one/curves/opacity/P:sc4:one:opacity:1/v
+merged: converged=true valid=true
+  agent edits kept: hint.class=accent, opacity={"t":0.3,"v":0.9}, ag1 present=true; human edits kept: tag renamed=true, h1 present=true; conflict one.cell=tl
+  last writer of hint.class (agent only): agent:claude-1
+  last writer of one.cell (both wrote): agent:claude-1
+  last writer of identity name of tag (human only): human:ana
+  last writer of effect ag1 (agent created): agent:claude-1
+  change log: ["777:agent:claude-1 run 7","2:ana","1:-"]
+-- T2 IR-level (naive) document
+E1 (rename sound of s2): 1 op: replace effects/1/name
+E2 (insert effect ag1 at 1 of 4): 26 ops: replace 1/id, replace 1/line, replace 1/name, add 1/when/absoluteFlicks, remove 1/when/event, add 1/when/reason, replace 1/written, replace 2/id, replace 2/line, add 2/name, remove 2/target, replace 2/verb, add 2/when/event/anchor, replace 2/when/event/kind, remove 2/when/event/of, remove 2/when/event/offset, replace 2/written, replace 3/id, replace 3/line, replace 3/target, replace 3/verb, replace 3/when/event/of/anchor/edge, replace 3/when/event/of/anchor/phrase, replace 3/when/event/offset/value, replace 3/written, add 4 (everything after the insertion point is rewritten field by field)
+V1 E1 applied by index to the live doc (a human inserted h1 at 0 meanwhile): effects=[h1:pop,s1:pop,s2:ding,f1,r1]  <- s1 got "pop", s2 unchanged; valid=true
+V1 E2 applied by index to the live doc: effect ids=[h1,ag1,s2,f1,r1,r1] valid=false
+V2 E1 applied on the agent's own replica, then merged: effects=[h1:pop,s1:whoosh,s2:pop,f1,r1] valid=true
+V2 E2 applied on the agent's own replica, then merged: effects=[h1:pop,s1:whoosh,ag1:pop,s2:ding,f1,r1] valid=true
+
+=== T3 edit at an older version on a live document ===
+yjs      (gc must be false; snapshot + createDocFromSnapshot): [{"id":"human"},{"id":"a"},{"id":"b"},{"id":"c-edited"}]
+loro     (forkAt(frontiers)): [{"id":"human"},{"id":"a"},{"id":"b"},{"id":"c-edited"}]
+automerge (A.view(heads) + clone): [{"id":"human"},{"id":"a"},{"id":"b"},{"id":"c-edited"}]
+automerge (A.changeAt(heads)): [{"id":"human"},{"id":"a"},{"id":"b"},{"id":"c-edited"}]

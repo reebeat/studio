@@ -1,0 +1,22 @@
+== 1. validator controls (real GraphSchema + validateScene + stand-in checks)
+unchanged story: ok=true
+sc4 without Element tag, dependants kept: ok=false [NoSuchEvent]
+p anchored to q and q to p: ok=false [EffectCycle]
+duplicate Element id in sc4: ok=false [DuplicateElementId(sc4)]
+curve point crossing the next: ok=false [BadCurve]
+
+== 2. peers before and after a two-way merge (each made one edit)
+yjs: equal before false, equal after true
+automerge: equal before false, equal after true
+loro: equal before false, equal after true
+
+== 3. replay with the last update withheld (seed 1, keyed)
+yjs: full replay equals gossiped state true; replay missing the last update equals it false
+automerge: full replay equals gossiped state true; replay missing the last update equals it false
+loro: full replay equals gossiped state true; replay missing the last update equals it false
+
+== 4. baselines
+real story: JSON 8884 B, gzip 2234 B, brotli 1859 B
+scaled story (210 scenes): JSON 268929 B, gzip 9910 B, brotli 4212 B
+Yjs gc true: 5000 edits of one field, saved 11369 B
+Yjs gc false: 5000 edits of one field, saved 45261 B

@@ -1,0 +1,6 @@
+yjs       cold start+seed 431 ms | B joined from snapshot: true | concurrent rename vs new effect: converged=true valid=true (f9 targets cube) | log {"n":3,"bytes":11540} | after restart from SQLite: join 140 ms (11527 B), same document=true
+yjs       control: restart without the SQLite file gives the same document: false (must be false)
+automerge cold start+seed 364 ms | B joined from snapshot: true | concurrent rename vs new effect: converged=true valid=true (f9 targets cube) | log {"n":3,"bytes":3848} | after restart from SQLite: join 201 ms (3654 B), same document=true
+automerge control: restart without the SQLite file gives the same document: false (must be false)
+loro      cold start+seed 368 ms | B joined from snapshot: true | concurrent rename vs new effect: converged=true valid=true (f9 targets cube) | log {"n":3,"bytes":15848} | after restart from SQLite: join 188 ms (16002 B), same document=true
+loro      control: restart without the SQLite file gives the same document: false (must be false)

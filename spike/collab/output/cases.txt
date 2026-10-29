@@ -1,0 +1,152 @@
+
+== a1: move the same element to different cells (cell, an enum)
+  naive yjs       conv VALID   [SWAP-DIFFERS: cell=tl] cell=br
+  naive automerge conv VALID   [SWAP-DIFFERS: cell=tl] cell=br
+  naive loro      conv VALID   [SWAP-DIFFERS: cell=tl] cell=br
+  keyed yjs       conv VALID   [SWAP-DIFFERS: cell=tl] cell=br
+  keyed automerge conv VALID   [SWAP-DIFFERS: cell=tl] cell=br
+  keyed loro      conv VALID   [SWAP-DIFFERS: cell=tl] cell=br
+
+== a2: move one element along x (user A) and along y (user B): property-wise merge
+  naive yjs       conv VALID   at=(0.1, 0.9) MIXED (a position neither user chose)
+  naive automerge conv VALID   at=(0.1, 0.9) MIXED (a position neither user chose)
+  naive loro      conv VALID   at=(0.1, 0.9) MIXED (a position neither user chose)
+  keyed yjs       conv VALID   at=(0.1, 0.9) MIXED (a position neither user chose)
+  keyed automerge conv VALID   at=(0.1, 0.9) MIXED (a position neither user chose)
+  keyed loro      conv VALID   at=(0.1, 0.9) MIXED (a position neither user chose)
+
+== a4: reorder: both move scene `sc7` (a title card) to different places: before sc5, and before sc6
+  naive yjs       conv INVALID scenes=[sc1,sc2,sc3,sc4,sc7,sc5,sc7,sc6]   <- DuplicateSceneId: sc7
+  naive automerge conv INVALID scenes=[sc1,sc2,sc3,sc4,sc7,sc5,sc7,sc6]   <- DuplicateSceneId: sc7
+  naive loro      conv VALID   [SWAP-DIFFERS: scenes=[sc1,sc2,sc3,sc4,sc7,sc5,sc6]] scenes=[sc1,sc2,sc3,sc4,sc5,sc7,sc6]
+  keyed yjs       conv VALID   [SWAP-DIFFERS: scenes=[sc1,sc2,sc3,sc4,sc7,sc5,sc6]] scenes=[sc1,sc2,sc3,sc4,sc5,sc7,sc6]
+  keyed automerge conv VALID   [SWAP-DIFFERS: scenes=[sc1,sc2,sc3,sc4,sc7,sc5,sc6]] scenes=[sc1,sc2,sc3,sc4,sc5,sc7,sc6]
+  keyed loro      conv VALID   [SWAP-DIFFERS: scenes=[sc1,sc2,sc3,sc4,sc7,sc5,sc6]] scenes=[sc1,sc2,sc3,sc4,sc5,sc7,sc6]
+
+== a3: move the same element to different (x, y), edited as one atomic value
+  naive yjs       conv VALID   [SWAP-DIFFERS: at=(0.1, 0.1)] at=(0.9, 0.9)
+  naive automerge conv VALID   [SWAP-DIFFERS: at=(0.1, 0.1)] at=(0.9, 0.9)
+  naive loro      conv VALID   [SWAP-DIFFERS: at=(0.1, 0.1)] at=(0.9, 0.9)
+  keyed yjs       conv VALID   [SWAP-DIFFERS: at=(0.1, 0.1)] at=(0.9, 0.9)
+  keyed automerge conv VALID   [SWAP-DIFFERS: at=(0.1, 0.1)] at=(0.9, 0.9)
+  keyed loro      conv VALID   [SWAP-DIFFERS: at=(0.1, 0.1)] at=(0.9, 0.9)
+
+== b1: one deletes element `tag` (with its dependants), the other edits its colour (class)
+  naive yjs       conv VALID   tag deleted (colour edit lost)
+  naive automerge conv VALID   tag deleted (colour edit lost)
+  naive loro      conv VALID   tag deleted (colour edit lost)
+  keyed yjs       conv VALID   tag deleted (colour edit lost)
+  keyed automerge conv VALID   tag deleted (colour edit lost)
+  keyed loro      conv VALID   tag deleted (colour edit lost)
+
+== b2: one deletes element `tag` (with its dependants), the other adds an effect that targets it
+  naive yjs       conv INVALID tag absent, f9 targets tag   <- UnknownReference: sc4: Element "tag" is not in Scene sc4; expected one, hint or note
+  naive automerge conv INVALID tag absent, f9 targets tag   <- UnknownReference: sc4: Element "tag" is not in Scene sc4; expected one, hint or note
+  naive loro      conv INVALID tag absent, f9 targets tag   <- UnknownReference: sc4: Element "tag" is not in Scene sc4; expected one, hint or note
+  keyed yjs       conv INVALID tag absent, f9 targets tag   <- UnknownReference: sc4: Element "tag" is not in Scene sc4; expected one, hint or note
+  keyed automerge conv INVALID tag absent, f9 targets tag   <- UnknownReference: sc4: Element "tag" is not in Scene sc4; expected one, hint or note
+  keyed loro      conv INVALID tag absent, f9 targets tag   <- UnknownReference: sc4: Element "tag" is not in Scene sc4; expected one, hint or note
+
+== c1: both insert an effect at index 1 (different ids)
+  naive yjs       conv VALID   [SWAP-DIFFERS: effects=[s1,sB,sA,s2,f1,r1]] effects=[s1,sA,sB,s2,f1,r1]
+  naive automerge conv VALID   [SWAP-DIFFERS: effects=[s1,sA,sB,s2,f1,r1]] effects=[s1,sB,sA,s2,f1,r1]
+  naive loro      conv VALID   [SWAP-DIFFERS: effects=[s1,sB,sA,s2,f1,r1]] effects=[s1,sA,sB,s2,f1,r1]
+  keyed yjs       conv VALID   [SWAP-DIFFERS: effects=[s1,sB,sA,s2,f1,r1]] effects=[s1,sA,sB,s2,f1,r1]
+  keyed automerge conv VALID   [SWAP-DIFFERS: effects=[s1,sB,sA,s2,f1,r1]] effects=[s1,sA,sB,s2,f1,r1]
+  keyed loro      conv VALID   [SWAP-DIFFERS: effects=[s1,sB,sA,s2,f1,r1]] effects=[s1,sA,sB,s2,f1,r1]
+
+== b3: one deletes element `note` (with its dependants), the other replaces the whole `note` record
+  naive yjs       conv INVALID note kept, text=replaced   <- HiddenNeverRevealed: sc4: Element "note" is visible=false and no effect shows it; expected a line of the [[eff
+  naive automerge conv INVALID note kept, text=replaced   <- HiddenNeverRevealed: sc4: Element "note" is visible=false and no effect shows it; expected a line of the [[eff
+  naive loro      conv VALID   note deleted (replacement lost)
+  keyed yjs       conv INVALID note kept, text=replaced   <- HiddenNeverRevealed: sc4: Element "note" is visible=false and no effect shows it; expected a line of the [[eff
+  keyed automerge conv INVALID note kept, text=replaced   <- HiddenNeverRevealed: sc4: Element "note" is visible=false and no effect shows it; expected a line of the [[eff
+  keyed loro      conv VALID   note deleted (replacement lost)
+
+== c2: both insert an effect at index 1, and both picked the next free id `s9`
+  naive yjs       conv INVALID [SWAP-DIFFERS: effects=[s1,s9,s9,s2,f1,r1]] effects=[s1,s9,s9,s2,f1,r1]   <- DuplicateEffectOrEventName(sc4): s9
+  naive automerge conv INVALID [SWAP-DIFFERS: effects=[s1,s9,s9,s2,f1,r1]] effects=[s1,s9,s9,s2,f1,r1]   <- DuplicateEffectOrEventName(sc4): s9
+  naive loro      conv INVALID [SWAP-DIFFERS: effects=[s1,s9,s9,s2,f1,r1]] effects=[s1,s9,s9,s2,f1,r1]   <- DuplicateEffectOrEventName(sc4): s9
+  keyed yjs       conv INVALID [SWAP-DIFFERS: effects=[s1,s9,s9,s2,f1,r1]] effects=[s1,s9,s9,s2,f1,r1]   <- DuplicateEffectOrEventName(sc4): s9
+  keyed automerge conv INVALID [SWAP-DIFFERS: effects=[s1,s9,s9,s2,f1,r1]] effects=[s1,s9,s9,s2,f1,r1]   <- DuplicateEffectOrEventName(sc4): s9
+  keyed loro      conv INVALID [SWAP-DIFFERS: effects=[s1,s9,s9,s2,f1,r1]] effects=[s1,s9,s9,s2,f1,r1]   <- DuplicateEffectOrEventName(sc4): s9
+
+== c4: both insert a run of three effects at index 1 (does the merge keep each run together?)
+  naive yjs       conv VALID   [SWAP-DIFFERS: effects=[s1,b1,b2,b3,a1,a2,a3,s2]] effects=[s1,a1,a2,a3,b1,b2,b3,s2]
+  naive automerge conv VALID   [SWAP-DIFFERS: effects=[s1,a1,a2,a3,b1,b2,b3,s2]] effects=[s1,b1,b2,b3,a1,a2,a3,s2]
+  naive loro      conv VALID   [SWAP-DIFFERS: effects=[s1,b1,b2,b3,a1,a2,a3,s2]] effects=[s1,a1,a2,a3,b1,b2,b3,s2]
+  keyed yjs       conv VALID   [SWAP-DIFFERS: effects=[s1,b1,a1,b2,a2,b3,a3,s2]] effects=[s1,a1,b1,a2,b2,a3,b3,s2]
+  keyed automerge conv VALID   [SWAP-DIFFERS: effects=[s1,b1,a1,b2,a2,b3,a3,s2]] effects=[s1,a1,b1,a2,b2,a3,b3,s2]
+  keyed loro      conv VALID   [SWAP-DIFFERS: effects=[s1,b1,a1,b2,a2,b3,a3,s2]] effects=[s1,a1,b1,a2,b2,a3,b3,s2]
+
+== c3: derived events p and q: one anchors p to q, the other anchors q to p (a cycle)
+  naive yjs       conv INVALID p=q, q=p   <- EffectCycle: sc4: effects and derived events wait for each other: p -> q -> p; expected a chain that ends at a
+  naive automerge conv INVALID p=q, q=p   <- EffectCycle: sc4: effects and derived events wait for each other: p -> q -> p; expected a chain that ends at a
+  naive loro      conv INVALID p=q, q=p   <- EffectCycle: sc4: effects and derived events wait for each other: p -> q -> p; expected a chain that ends at a
+  keyed yjs       conv INVALID p=q, q=p   <- EffectCycle: sc4: effects and derived events wait for each other: p -> q -> p; expected a chain that ends at a
+  keyed automerge conv INVALID p=q, q=p   <- EffectCycle: sc4: effects and derived events wait for each other: p -> q -> p; expected a chain that ends at a
+  keyed loro      conv INVALID p=q, q=p   <- EffectCycle: sc4: effects and derived events wait for each other: p -> q -> p; expected a chain that ends at a
+
+== d1: one renames element `one` to `cube` everywhere, the other adds an effect that targets `one`
+  naive yjs       conv INVALID f9 targets one; sc4 elements=[cube,tag,hint,note]   <- UnknownReference: sc4: Element "one" is not in Scene sc4; expected cube, tag, hint or note; did you mean note?
+  naive automerge conv INVALID f9 targets one; sc4 elements=[cube,tag,hint,note]   <- UnknownReference: sc4: Element "one" is not in Scene sc4; expected cube, tag, hint or note; did you mean note?
+  naive loro      conv INVALID f9 targets one; sc4 elements=[cube,tag,hint,note]   <- UnknownReference: sc4: Element "one" is not in Scene sc4; expected cube, tag, hint or note; did you mean note?
+  keyed yjs       conv VALID   f9 targets cube; sc4 elements=[cube,tag,hint,note]
+  keyed automerge conv VALID   f9 targets cube; sc4 elements=[cube,tag,hint,note]
+  keyed loro      conv VALID   f9 targets cube; sc4 elements=[cube,tag,hint,note]
+
+== d2: one renames `one` to `cube`, the other adds an event anchored to `one.move.end` in sc5
+  naive yjs       conv INVALID z anchors to one; sc5 elements=[cube,hint,three]   <- UnknownReference: sc5: Element "one" is not in Scene sc5; expected cube, hint, three, tag or note; did you mea
+  naive automerge conv INVALID z anchors to one; sc5 elements=[cube,hint,three]   <- UnknownReference: sc5: Element "one" is not in Scene sc5; expected cube, hint, three, tag or note; did you mea
+  naive loro      conv INVALID z anchors to one; sc5 elements=[cube,hint,three]   <- UnknownReference: sc5: Element "one" is not in Scene sc5; expected cube, hint, three, tag or note; did you mea
+  keyed yjs       conv VALID   z anchors to cube; sc5 elements=[cube,hint,three]
+  keyed automerge conv VALID   z anchors to cube; sc5 elements=[cube,hint,three]
+  keyed loro      conv VALID   z anchors to cube; sc5 elements=[cube,hint,three]
+
+== d3: one renames `one` to `cube` everywhere, the other adds a new element `one` to sc7
+  naive yjs       conv VALID   identity sc3:cube sc4:cube sc5:cube sc6:gone sc7:one
+  naive automerge conv VALID   identity sc3:cube sc4:cube sc5:cube sc6:gone sc7:one
+  naive loro      conv VALID   identity sc3:cube sc4:cube sc5:cube sc6:gone sc7:one
+  keyed yjs       conv VALID   identity sc3:cube sc4:cube sc5:cube sc6:gone sc7:cube
+  keyed automerge conv VALID   identity sc3:cube sc4:cube sc5:cube sc6:gone sc7:cube
+  keyed loro      conv VALID   identity sc3:cube sc4:cube sc5:cube sc6:gone sc7:cube
+
+== d4: one renames `one` to `box2`, the other renames `tag` to `box2` (same scene)
+  naive yjs       conv INVALID sc4 elements=[box2,box2,hint,note]   <- DuplicateElementId(sc3): box2
+  naive automerge conv INVALID sc4 elements=[box2,box2,hint,note]   <- DuplicateElementId(sc3): box2
+  naive loro      conv INVALID sc4 elements=[box2,box2,hint,note]   <- DuplicateElementId(sc3): box2
+  keyed yjs       conv INVALID sc4 elements=[box2,box2,hint,note]   <- DuplicateElementId(sc3): box2
+  keyed automerge conv INVALID sc4 elements=[box2,box2,hint,note]   <- DuplicateElementId(sc3): box2
+  keyed loro      conv INVALID sc4 elements=[box2,box2,hint,note]   <- DuplicateElementId(sc3): box2
+
+== e1: curve points: one moves p1 (t .3 to .6), the other moves p2 (t .7 to .4): they cross
+  naive yjs       conv INVALID t=[0,0.6,0.4,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  naive automerge conv INVALID t=[0,0.6,0.4,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  naive loro      conv INVALID t=[0,0.6,0.4,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  keyed yjs       conv VALID   t=[0,0.4,0.6,1]
+  keyed automerge conv VALID   t=[0,0.4,0.6,1]
+  keyed loro      conv VALID   t=[0,0.4,0.6,1]
+
+== e2: curve points: one moves p1 (t .3 to .6), the other inserts a point at t=.5 after p1
+  naive yjs       conv INVALID t=[0,0.6,0.5,0.7,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  naive automerge conv INVALID t=[0,0.6,0.5,0.7,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  naive loro      conv INVALID t=[0,0.6,0.5,0.7,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  keyed yjs       conv VALID   t=[0,0.5,0.6,0.7,1]
+  keyed automerge conv VALID   t=[0,0.5,0.6,0.7,1]
+  keyed loro      conv VALID   t=[0,0.5,0.6,0.7,1]
+
+== e3: curve points: one sets p1.v = .9, the other sets p1.t = .5 (same point, different fields)
+  naive yjs       conv VALID   points=[{"t":0.5,"v":0.9}]
+  naive automerge conv VALID   points=[{"t":0.5,"v":0.9}]
+  naive loro      conv VALID   points=[{"t":0.5,"v":0.9}]
+  keyed yjs       conv VALID   points=[{"t":0.5,"v":0.9}]
+  keyed automerge conv VALID   points=[{"t":0.5,"v":0.9}]
+  keyed loro      conv VALID   points=[{"t":0.5,"v":0.9}]
+
+== e4: curve points: both move a different point to t=.5 (a tie)
+  naive yjs       conv INVALID t=[0,0.5,0.5,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  naive automerge conv INVALID t=[0,0.5,0.5,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  naive loro      conv INVALID t=[0,0.5,0.5,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  keyed yjs       conv INVALID t=[0,0.5,0.5,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  keyed automerge conv INVALID t=[0,0.5,0.5,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)
+  keyed loro      conv INVALID t=[0,0.5,0.5,1]   <- BadCurve: sc4/one.opacity: SchemaError(t is not strictly increasing at point 2)

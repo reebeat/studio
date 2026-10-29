@@ -1,0 +1,7 @@
+seeds=10 orders/seed=20; "distinct" = extra distinct outputs beyond the first, summed over seeds (0 = byte-identical)
+naive yjs       replays=200 ops=1357 equal-to-gossip=200/200 rawDistinct=0 canonDistinct=0 irDistinct=0 (undecodable 0) binaryDistinct=10 errors=0
+naive automerge replays=200 ops=1358 equal-to-gossip=200/200 rawDistinct=0 canonDistinct=0 irDistinct=0 (undecodable 0) binaryDistinct=190 errors=0
+naive loro      replays=200 ops=1327 equal-to-gossip=200/200 rawDistinct=0 canonDistinct=0 irDistinct=0 (undecodable 0) binaryDistinct=0 errors=0
+keyed yjs       replays=200 ops=1337 equal-to-gossip=200/200 rawDistinct=0 canonDistinct=0 irDistinct=0 (undecodable 0) binaryDistinct=11 errors=0
+keyed automerge replays=200 ops=1330 equal-to-gossip=200/200 rawDistinct=0 canonDistinct=0 irDistinct=0 (undecodable 0) binaryDistinct=190 errors=0
+keyed loro      replays=200 ops=1330 equal-to-gossip=200/200 rawDistinct=0 canonDistinct=0 irDistinct=0 (undecodable 0) binaryDistinct=0 errors=0

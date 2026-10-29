@@ -1,0 +1,130 @@
+Title: Same name, new place
+Author: reebeat
+Speed: 1.1
+
+/* Original text written for reebeat release 1. The narration is read by a synthetic voice. Every effect (sound, show, focus) is written once per Scene in its effects block and says WHEN it happens: at a word, at the slide change, or at a moment of an Element's own motion. */
+
+# Two screens
+
+= A box on one screen and a box on the next: is it the same box?
+
+INT. TITLE CARD - DAY #sc1#
+
+Same name, new place {id=title cell=mc class=title}
+A small idea about moving boxes {id=sub cell=bc class=muted}
+
+NARRATOR
+(slowly)
+Here is a small idea about moving things.
+
+NARRATOR
+A box can glide across a screen only if we know it is the same box.
+
+INT. FIRST SCREEN - DAY #sc2#
+
+First screen {id=tag cell=tl class=label}
+A box {id=box cell=ml class=box}
+Another box {id=twin cell=mr class=box visible=false}
+
+[[effects
+  f1: focus box at word("screen", 1).end
+  r1: show twin at word("too").end
+]]
+
+NARRATOR
+Picture a box on a screen.
+
+NARRATOR
+On the next screen there is a box too. Is it the same box, or a new one?
+
+# A name that stays
+
+= Give every box a name, and each screen can follow it.
+
+> CUT
+
+INT. THE NAMES - DAY #sc3#
+
+Box one {id=one cell=ml class=box}
+Box two {id=two cell=mr class=box}
+Every box has a name {id=tag cell=tc class=label}
+
+[[effects
+  f1: focus tag at word("name").end
+]]
+
+NARRATOR
+Give every box a name. Here the names are one and two.
+
+> AUTO-ANIMATE
+
+INT. THE NEXT SCREEN - DAY #sc4#
+
+Box one {id=one cell=mc class=box}
+Every box has a name {id=tag cell=tc class=accent}
+Same name, so it moves {id=hint cell=bc class=muted}
+Matched by id {id=note cell=br class=label visible=false}
+
+[[effects
+  s1: sound whoosh at transition.start
+  s2: sound ding at one.move.50%
+  f1: focus hint at word("slides").start -0.2s
+  r1: show note at word("matches").end +0.1s
+]]
+
+NARRATOR
+On the next screen, box one sits somewhere else. Its name matches, so it slides there.
+
+/* INTERIM WORKAROUND, not a creative choice: at the story rate (1.1) whisper.cpp hears "has" as "is" in the next Line and the exact-match ratio falls to 0.875, below 0.9. At 1.05 it is heard correctly. Remove this (speed 1.05) once word timings come from the synthesizer or the alignment is judged by its path (follow-up to spec 0001). */
+NARRATOR
+(speed 1.05)
+Box two has no match, so it leaves.
+
+> AUTO-ANIMATE
+
+INT. A NEW NAME - DAY #sc5#
+
+Box one {id=one cell=mr class=box}
+Same name, so it moves {id=hint cell=bc class=accent}
+Box three {id=three cell=ml class=box}
+
+[[effects
+  s1: sound ding at transition.start
+]]
+
+NARRATOR
+A name we have not seen before is a new box, so it appears.
+
+INT. THREE ANSWERS - DAY #sc6#
+
+Three answers {id=head cell=tc class=title}
+Same name: it moves {id=same cell=ml class=box}
+New name: it appears {id=new cell=mc class=box visible=false}
+Missing name: it leaves {id=gone cell=mr class=box visible=false}
+
+[[effects
+  r1: show new at word("appears").end
+  r2: show gone at word("leaves").end
+]]
+
+NARRATOR
+Comparing two screens by name gives three answers.
+
+NARRATOR
+The same name means it moves.
+
+NARRATOR
+A new name means it appears. A missing name means it leaves.
+
+INT. THE POINT - DAY #sc7#
+
+Same name, new place {id=title cell=mc class=title}
+Keep the name and the motion comes free {id=sub cell=bc class=muted}
+
+[[effects
+  p1: sound pop at 0.5s because "a soft pop as the closing card settles, before the narration starts"
+]]
+
+NARRATOR
+(pause 0.5)
+So keep the name, and the motion comes for free.
