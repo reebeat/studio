@@ -1,0 +1,124 @@
+# Spec 0004 (docs/specs/0004-distribution.md): the web deploy of the editor to Cloudflare, shaped like
+# vektorprogrammet-reimagined's previews.yml.
+# - push to main: deploy the stage `main`.
+# - pull request: deploy the stage `pr-<n>` (a preview), then open the URL in a headless browser and keep a screenshot.
+# - pull request closed: destroy the stage `pr-<n>`.
+#
+# INERT until two things are done (spec 0004, "Unblocking"): an Alchemy release that contains alchemy-run/alchemy#2754
+# is added to the workspace, and the repository variable WEB_DEPLOY is set to `true`. Until then every job is skipped.
+# Secrets (the operator's, never created by an agent): CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID. A pull request
+# from a fork gets no secrets, so its deploy job fails at the first step that needs one: it is skipped for forks.
+name: Previews
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+concurrency:
+  group: previews-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  STAGE: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || 'main' }}
+
+jobs:
+  deploy:
+    if: >-
+      vars.WEB_DEPLOY == 'true' && github.event.action != 'closed' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: cachix/install-nix-action@3c6342b75005b9cc7c7d4069c3e9179247c89012 # v31
+      - uses: cachix/cachix-action@97e5ff84d02b3b4f9936339f767e17f03c9252ed # v16
+        with:
+          name: devenv
+      - name: Install pinned devenv CLI
+        shell: bash
+        run: nix profile add github:cachix/devenv/b904dcb51fe48c30db250038241507f60752f222
+      - name: Install workspace dependencies
+        shell: bash
+        run: devenv shell -- bun install --frozen-lockfile
+      - name: Deploy stage ${{ env.STAGE }}
+        shell: bash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          devenv shell -- bash -c 'cd apps/editor && bunx alchemy deploy alchemy.run.ts --stage "$STAGE" --yes' \
+            2>&1 | tee "$RUNNER_TEMP/deploy.log"
+      # The URL is the one the deploy itself printed, and it must be, as a whole, an https `workers.dev` host: a pull
+      # request comment is not a source (anyone can comment on a public repository).
+      - name: Find the deployed URL
+        id: url
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="$(sed -E 's/\x1b\[[0-9;]*m//g' "$RUNNER_TEMP/deploy.log" \
+            | sed -nE "s/^[[:space:]]*url: '([^']+)'[[:space:]]*$/\1/p" | tail -n 1)"
+          pattern='^https://[a-z0-9-]+(\.[a-z0-9-]+)*\.workers\.dev/?$'
+          if ! [[ $url =~ $pattern ]]; then
+            echo "::error::the deploy printed no workers.dev URL (got: ${url:-none})"
+            exit 1
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      # Falsifier F1 of spec 0004: the deployed page renders the editor shell. A new Worker may need a moment.
+      - name: Render the deployed page in a browser
+        shell: bash
+        env:
+          URL: ${{ steps.url.outputs.url }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/shot"
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            dom="$(google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=8000 --dump-dom "$URL" 2>/dev/null || true)"
+            if scripts/checkShellDom.sh <<<"$dom"; then
+              google-chrome --headless=new --no-sandbox --disable-gpu --window-size=1100,700 --virtual-time-budget=8000 \
+                --screenshot="$RUNNER_TEMP/shot/shell.png" "$URL" >/dev/null 2>&1
+              echo "the editor shell rendered at $URL"
+              exit 0
+            fi
+            sleep 6
+          done
+          echo "::error::the shell did not render at $URL"
+          exit 1
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: preview-${{ env.STAGE }}
+          path: ${{ runner.temp }}/shot/shell.png
+          if-no-files-found: ignore
+
+  cleanup:
+    if: >-
+      vars.WEB_DEPLOY == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refuse long-lived stages
+        shell: bash
+        run: |
+          case "$STAGE" in
+            main|production) echo "::error::cleanup must never destroy stage $STAGE"; exit 1 ;;
+          esac
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: cachix/install-nix-action@3c6342b75005b9cc7c7d4069c3e9179247c89012 # v31
+      - uses: cachix/cachix-action@97e5ff84d02b3b4f9936339f767e17f03c9252ed # v16
+        with:
+          name: devenv
+      - name: Install pinned devenv CLI
+        shell: bash
+        run: nix profile add github:cachix/devenv/b904dcb51fe48c30db250038241507f60752f222
+      - name: Install workspace dependencies
+        shell: bash
+        run: devenv shell -- bun install --frozen-lockfile
+      - name: Destroy stage ${{ env.STAGE }}
+        shell: bash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: devenv shell -- bash -c 'cd apps/editor && bunx alchemy destroy alchemy.run.ts --stage "$STAGE" --yes'

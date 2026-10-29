@@ -6,7 +6,7 @@ Verify skill: none, process and skills only; its own proof is the verification r
 
 ## Problem
 
-Spec 0000 copied reebeat's `pr-create` and `review-pr` at `f7c3488`; `review-pr` had been adapted from vektorprogrammet-reimagined (the donor) at `797e9e4`, while `pr-create` is reebeat's own, built on the machine skill `pr` and the operator's projects-tier `AGENTS.md` (the donor has no `pr-create` skill and no PR-body rule; see Revisions 2026-10-29, review rounds 1 and 2). Since then the donor kept learning, and today's reviews (reebeat spikes #11, studio #3) found failures that no skill states. Studio has no verification skill: a reviewer cannot tell how to run the editor and look at it, and nothing makes a PR that changes what a person sees keep that description true.
+Spec 0000 copied reebeat's `pr-create` and `review-pr` at `f7c3488`; `review-pr` had been adapted from vektorprogrammet-reimagined (the donor) at `797e9e4`, while `pr-create` is reebeat's own, built on the machine skill `pr` and the operator's projects-tier `AGENTS.md` (the donor has no `pr-create` skill and no PR-body rule outside `review-pr/SKILL.md:76`; see Revisions 2026-10-29, review rounds 1 and 2). Since then the donor kept learning, and today's reviews (reebeat spikes #11, studio #3) found failures that no skill states. Studio has no verification skill: a reviewer cannot tell how to run the editor and look at it, and nothing makes a PR that changes what a person sees keep that description true.
 
 ## Goal
 

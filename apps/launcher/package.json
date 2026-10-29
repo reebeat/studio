@@ -1,0 +1,22 @@
+{
+  "name": "@reebeat-studio/launcher",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "embed": "bun scripts/embed.ts",
+    "build": "bun run embed && bun build --compile ./src/compiled.ts --outfile dist/reebeat-studio",
+    "dev": "bun src/dev.ts",
+    "test": "vp test run"
+  },
+  "dependencies": {
+    "@effect/platform-bun": "catalog:",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@effect/vitest": "catalog:",
+    "@reebeat-studio/editor": "workspace:*",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}

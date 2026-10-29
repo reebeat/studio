@@ -1,5 +1,5 @@
 import { Runtime } from "foldkit";
 
-import { editorApplication } from "./application.ts";
+import { editorApplication, rootSelector } from "./application.ts";
 
-Runtime.run(editorApplication(document.querySelector("#root")));
+Runtime.run(editorApplication(document.querySelector(rootSelector)));

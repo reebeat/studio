@@ -8,6 +8,11 @@
       "project": ["src/**/*.ts"],
       "ignoreDependencies": ["tailwindcss"]
     },
+    "apps/launcher": {
+      "entry": ["src/compiled.ts", "test/**/*.test.ts"],
+      "project": ["src/**/*.ts", "scripts/**/*.ts", "test/**/*.ts"],
+      "ignoreDependencies": ["@reebeat-studio/editor"]
+    },
     "tools/quality": {
       "entry": ["checkEffectExceptions.ts"],
       "project": ["*.ts", "test/**/*.ts"]

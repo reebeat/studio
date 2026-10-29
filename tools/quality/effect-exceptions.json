@@ -1,4 +1,28 @@
 {
   "description": "Registered suppressions. Every live suppression directive (oxlint, eslint, ts-expect-error, ts-ignore, ts-nocheck) must match an entry by file and directive, and every entry needs a live suppression. An entry names its scope, reason, native alternatives examined, owner, versions and retirement trigger.",
-  "exceptions": []
+  "exceptions": [
+    {
+      "id": "EX-0001",
+      "scope": {
+        "files": ["apps/launcher/src/hostPlatform.ts"],
+        "directives": ["oxlint-disable-next-line"]
+      },
+      "reason": "The launcher opens the user's default browser, and the command differs per operating system (open, xdg-open, cmd /c start). Bun and Node expose the operating system only as the ambient process.platform, which the Effect diagnostics (effect/no-cross-runtime, effect/no-ambient-authority) reject outside the Effect environment. HostPlatform is the one adapter that reads it and hands it on as a service.",
+      "nativeAlternativesExamined": [
+        "A platform service in effect 4.1.0: none exists. Its own persistence/UserDirectories module reads process.platform inside its implementation, so the installed Effect has no public capability for it.",
+        "@effect/platform-bun 4.1.0 BunServices (ChildProcessSpawner, FileSystem, Path, Terminal, Stdio): none reports the operating system.",
+        "Path.sep to tell Windows from the rest: cannot tell macOS from Linux, and trying open before xdg-open is unsafe (on some Linux systems open is openvt).",
+        "Config.string over an environment variable (OS is set on Windows only): not available on macOS or Linux.",
+        "A compile-time constant per cross-compiled target (bun build --define): leaves the development entry (bun src/dev.ts) without a value, and adds a second source for a fact the runtime already knows."
+      ],
+      "owner": "apps/launcher",
+      "versions": {
+        "effect": "4.1.0",
+        "@effect/platform-bun": "4.1.0",
+        "@effect/tsgo": "0.63.0",
+        "typescript": "7.0.2"
+      },
+      "retirementTrigger": "An Effect release exposes the host operating system as a service (or an Effect platform layer reports it), or the launcher stops choosing a command per operating system."
+    }
+  ]
 }
