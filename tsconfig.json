@@ -12,6 +12,7 @@
           "@effect/platform-node/NodeRuntime",
           "@effect/platform-node/NodeServices",
           "@effect/vitest",
+          "effect/ByteSize",
           "effect/crypto/Digest",
           "effect/cli",
           "effect/FileSystem",

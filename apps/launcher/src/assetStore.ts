@@ -55,8 +55,9 @@ export const fromEmbedded = (encoded: typeof EmbeddedAssets.Encoded) =>
 export const fromFiles = (files: Readonly<Record<string, Uint8Array>>) =>
   Layer.succeed(AssetStore, ofFiles(files));
 
-// A built app on disk, for development and tests. A key that names no file is `None`; any other read failure is a
-// defect, because the keys come from `assetKeyOf`, which has already refused every path that leaves the directory.
+// A built app on disk, for development and tests. A key that names no regular file (nothing there, or a directory such
+// as `assets`) is `None`; any other read failure is a defect, because the keys come from `assetKeyOf`, which has
+// already refused every path that leaves the directory.
 export const fromDirectory = (root: string) =>
   Layer.effect(
     AssetStore,
@@ -69,7 +70,13 @@ export const fromDirectory = (root: string) =>
           Effect.gen(function* find() {
             const file = path.join(root, key);
 
-            return (yield* fs.exists(file))
+            if (!(yield* fs.exists(file))) {
+              return Option.none();
+            }
+
+            const info = yield* fs.stat(file);
+
+            return info.type === "File"
               ? Option.some(assetOf(key, yield* fs.readFile(file)))
               : Option.none();
           }).pipe(Effect.orDie),

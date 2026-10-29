@@ -1,5 +1,13 @@
 import { assert, describe, it } from "@effect/vitest";
-import { Effect, FileSystem, Layer, Option, Path, Schema } from "effect";
+import {
+  ByteSize,
+  Effect,
+  FileSystem,
+  Layer,
+  Option,
+  Path,
+  Schema,
+} from "effect";
 
 import {
   AssetStore,
@@ -54,28 +62,56 @@ describe("fromEmbedded", () => {
   );
 });
 
-// A file system with one file, `/app/index.html`.
-const oneFile = FileSystem.layerNoop({
-  exists: (path) => Effect.succeed(path === "/app/index.html"),
-  readFile: () => Effect.succeed(bytes("<p>hi")),
+const info = (type: FileSystem.File.Type): FileSystem.File.Info => ({
+  atime: Option.none(),
+  birthtime: Option.none(),
+  blksize: Option.none(),
+  blocks: Option.none(),
+  dev: 0n,
+  gid: Option.none(),
+  ino: Option.none(),
+  mode: 0o644,
+  mtime: Option.none(),
+  nlink: Option.none(),
+  rdev: Option.none(),
+  size: ByteSize.bytes(0),
+  type,
+  uid: Option.none(),
+});
+
+// A file system with one file, `/app/index.html`, and one directory, `/app/assets`. Reading a directory is an error,
+// as on a real disk: the store must not try.
+const fakeDisk = FileSystem.layerNoop({
+  exists: (path) =>
+    Effect.succeed(path === "/app/index.html" || path === "/app/assets"),
+  readFile: (path) =>
+    path === "/app/index.html"
+      ? Effect.succeed(bytes("<p>hi"))
+      : Effect.die(`read of ${path}`),
+  stat: (path) =>
+    Effect.succeed(info(path === "/app/assets" ? "Directory" : "File")),
 });
 
 describe("fromDirectory", () => {
-  it.effect("reads a file under the root, answers None for a missing one", () =>
-    Effect.gen(function* directory() {
-      const store = yield* AssetStore.pipe(
-        Effect.provide(
-          fromDirectory("/app").pipe(
-            Layer.provide(Layer.mergeAll(oneFile, Path.layer))
+  it.effect(
+    "reads a file under the root; a missing key and a directory are None",
+    () =>
+      Effect.gen(function* directory() {
+        const store = yield* AssetStore.pipe(
+          Effect.provide(
+            fromDirectory("/app").pipe(
+              Layer.provide(Layer.mergeAll(fakeDisk, Path.layer))
+            )
           )
-        )
-      );
+        );
 
-      assert.deepStrictEqual(
-        Option.map(yield* store.find("index.html"), (asset) => asset.bytes),
-        Option.some(bytes("<p>hi"))
-      );
-      assert.isTrue(Option.isNone(yield* store.find("nope.html")));
-    })
+        assert.deepStrictEqual(
+          Option.map(yield* store.find("index.html"), (asset) => asset.bytes),
+          Option.some(bytes("<p>hi"))
+        );
+        assert.isTrue(Option.isNone(yield* store.find("nope.html")));
+        // `GET /assets` names the directory: that is 404, not a crash.
+        assert.isTrue(Option.isNone(yield* store.find("assets")));
+      })
   );
 });
