@@ -24,7 +24,7 @@ cd apps/editor && devenv shell -- bunx vp dev      # the shell at http://localho
 
 ## Licence
 
-Source visible; all rights reserved; licence not decided. No licence file is present on purpose, so nothing here is licensed for reuse yet. Third-party code keeps its own licences (see `PROVENANCE.md` and the licence files next to copied code).
+Copyright 2026 Philip Bjørknes Krogh. All rights reserved; licence not decided. The source is visible, and no licence file is present on purpose, so nothing here is licensed for reuse yet. Third-party code keeps its own licences (see `PROVENANCE.md` and the licence files next to copied code).
 
 ## Contributing
 
