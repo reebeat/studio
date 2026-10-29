@@ -7,7 +7,8 @@ The development lifecycle (spec 0000) is copied from [`reebeat/reebeat`](https:/
 | File | Source (reebeat `f7c3488`) | Deviation |
 | --- | --- | --- |
 | `.vite-hooks/pre-commit`, `commit-msg`, `pre-push` | same paths | identical |
-| `commitlint.config.ts`, `.jscpd.json`, `devenv.yaml`, `devenv.lock`, `tsconfig.json` | same paths | identical (the `tsconfig.json` `include` already lists only root and `tools/` files; `apps/editor` has its own) |
+| `commitlint.config.ts`, `.jscpd.json`, `devenv.yaml`, `devenv.lock` | same paths | identical |
+| `tsconfig.json` | same path | identical to reebeat's except `allowedUnstableApis`, which also lists the `effect/http/*` modules and `@effect/platform-bun/*` modules the launcher uses (spec 0004, Revisions); the `include` lists only root and `tools/` files, each app has its own `tsconfig.json` |
 | `.agents/skills/review-pr/record-round.sh`, `merge.sh` | same paths | identical (their headers name the donor) |
 | `.agents/skills/review-pr/SKILL.md`, `.agents/skills/pr-create/SKILL.md` | same paths | a new provenance header and a description that names this repository; `pr-create` points the glossary at reebeat's |
 | `tools/quality/checkEffectExceptions.ts`, `effectExceptions.ts`, `effectFamily.ts`, `diagnosticRules.ts`, `tsconfig.json`, `vite.config.ts`, `test/diagnosticCoverage.test.ts`, `test/effectExceptions.test.ts` | same paths | identical |
@@ -23,6 +24,7 @@ The development lifecycle (spec 0000) is copied from [`reebeat/reebeat`](https:/
 | `.github/workflows/checks.yml` | same path | no Chromium sandbox variable, tier step or journey step; a build step |
 | `AGENTS.md` | same path | gates, Effect and Foldkit section, emergency command and project description rewritten for this repository |
 | `docs/specs/0000-development-lifecycle.md` | same path | rewritten: it records what is the same, what differs and why |
+| `scripts/wizards/cloudflareWebDeploy.sh` | the machine skill `wizard`, `template.sh` (sha256 `33cbe9dfb1d0e918…`; not a reebeat file) | lines 1 to 182 (the library) unchanged; the stages are written for this repository |
 
 Not copied: `tools/quality/checkTiers.ts`, `tiers.ts`, `genGrammar.ts`, `grammarCopies.ts` and their tests, `GLOSSARY.md`, `docs/design`, `docs/grammar`, `packages/`, `stories/`, `STATE.md` (rewritten).
 

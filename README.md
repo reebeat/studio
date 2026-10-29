@@ -14,13 +14,23 @@ devenv shell -- bun run ready          # every gate: check, exceptions, tests, b
 cd apps/editor && devenv shell -- bunx vp dev      # the shell at http://localhost:5173/
 ```
 
+The single binary (spec 0004; needs Bun, so inside devenv):
+
+```sh
+devenv shell -- bun run build                    # builds the editor, embeds it, compiles apps/launcher/dist/reebeat-studio
+apps/launcher/dist/reebeat-studio                # serves on 127.0.0.1 (a free port) and opens your browser; Ctrl-C exits 0
+apps/launcher/dist/reebeat-studio --check        # start, verify over HTTP, exit 0
+```
+
+Release binaries for linux x64 and arm64, macOS arm64 and x64, and Windows x64 come from CI (`.github/workflows/binaries.yml`) with `SHA256SUMS.txt`; the macOS and Windows ones are unsigned.
+
 ## Where to read
 
 - [`AGENTS.md`](AGENTS.md): the process, the gate table, the Effect and Foldkit rules.
 - [`docs/design/lenses.md`](docs/design/lenses.md): how the studio is organised (lenses, free or paid), design only.
 - [`docs/specs/`](docs/specs/): one spec per felt journey; [`STATE.md`](STATE.md) says which is active.
 - [`PROVENANCE.md`](PROVENANCE.md): what was copied from reebeat, at which commit, with which deviations.
-- `apps/editor`: the Foldkit app. `tools/quality`: the exception registry check, the Effect family check and the Foldkit lint adapter.
+- `apps/editor`: the Foldkit app. `apps/launcher`: the single binary that serves it on `127.0.0.1` ([spec 0004](docs/specs/0004-distribution.md)). `tools/quality`: the exception registry check, the Effect family check and the Foldkit lint adapter.
 
 ## Licence
 

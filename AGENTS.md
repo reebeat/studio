@@ -31,14 +31,15 @@ Every gate is a root script in `package.json`; `bun run ready` runs them in this
 | Format, lint, types | `bun run check` (`vp check`) | `ready`, CI | Oxfmt drift; Oxlint with Ultracite, the Effect plugin and diagnostics, the Foldkit plugin, anti-slop rules, cognitive complexity above 15; type errors (type-aware via tsgolint) | a function with complexity 16; a `switch` on a Message tag in `apps/editor` |
 | Exception registry | `bun run check:exceptions` | `ready`, CI | a suppression directive without a registry entry; a registry entry without a live suppression | add `// oxlint-disable-next-line <rule>` with no entry |
 | Effect family | `bun run test` (`tools/quality/test/effectFamily.test.ts`) | `ready`, CI | `effect` locked at two versions, or an `@effect/*` package at another version than `effect` in `bun.lock`; `@effect/tsgo` locked at two versions | change one `@effect/*` entry of `bun.lock` |
-| Build | `bun run build` (`vp build` in `apps/editor`) | `ready`, CI | the editor no longer bundles | import a module that does not exist |
+| Build | `bun run build` (`vp build` in `apps/editor`, then the launcher embeds it and compiles the host binary) | `ready`, CI | the editor no longer bundles; the launcher no longer compiles | import a module that does not exist |
+| Binaries | `.github/workflows/binaries.yml` (`apps/launcher/scripts/smokeBinary.sh`) | CI, every pull request | a binary that does not start, serve, refuse writes, refuse a non-loopback connection, or exit 0 on SIGTERM; a checksum or a file type that is wrong | bind `0.0.0.0` in `apps/launcher/src/bunServer.ts` and run the smoke |
 | Dead code | `bun run knip` | `ready`, CI | unused files, exports and dependencies | export a symbol nothing imports |
 | Duplication | `bun run cpd` | `ready`, CI | copy-paste (threshold 0) | paste a 40-token block twice |
 | Secrets, history | `bun run secrets` | `ready`, CI | a secret anywhere in the git history | commit a fake key on a scratch branch |
 
 ## Exceptions
 
-Fix the code, not the rule. When a suppression (`oxlint-disable`, `eslint-disable`, `@ts-expect-error`, `@ts-ignore`, `@ts-nocheck`) is genuinely needed, add an entry to [`tools/quality/effect-exceptions.json`](tools/quality/effect-exceptions.json) in the same change: `id` (`EX-NNNN`), `scope` (`files`, `directives`), `reason`, `nativeAlternativesExamined`, `owner`, `versions` (the versions examined) and `retirementTrigger`. `bun run check:exceptions` fails on a suppression without an entry and on an entry without a live suppression, so an entry retires with its suppression. The registry is empty today. A rule turned off in `vite.config.ts` is not a suppression directive: it carries its reason in a comment there and in the spec's Revisions.
+Fix the code, not the rule. When a suppression (`oxlint-disable`, `eslint-disable`, `@ts-expect-error`, `@ts-ignore`, `@ts-nocheck`) is genuinely needed, add an entry to [`tools/quality/effect-exceptions.json`](tools/quality/effect-exceptions.json) in the same change: `id` (`EX-NNNN`), `scope` (`files`, `directives`), `reason`, `nativeAlternativesExamined`, `owner`, `versions` (the versions examined) and `retirementTrigger`. `bun run check:exceptions` fails on a suppression without an entry and on an entry without a live suppression, so an entry retires with its suppression. The registry has one entry, EX-0001 (`apps/launcher/src/hostPlatform.ts` reads the ambient `process.platform`). A rule turned off in `vite.config.ts` is not a suppression directive: it carries its reason in a comment there and in the spec's Revisions.
 
 ## Effect and Foldkit
 
@@ -48,6 +49,10 @@ Every agent that writes TypeScript here writes native Effect (v4, pinned in the 
 - **Decision ladder:** native construct, composition of native constructs, a small domain abstraction built from Effect, a boundary adapter, a registered exception.
 - **Pure stays pure.** `update`, `view` and every function of the Model are total functions; work leaves `update` only as a Command, a Subscription or a ManagedResource (skill `effect-ui-lifetimes`).
 - **Versions.** `effect` and every `@effect/*` runtime package are one version (`tools/quality/effectFamily.ts`): 4.1.0. **Foldkit 0.169.0 declares a peer `effect@4.0.0`**, so bun prints "incorrect peer dependency" warnings; the Story and Scene tests, the build and a Chromium smoke run on 4.1.0 (spec 0000, Revisions 2026-10-29). `@foldkit/vite-plugin` 0.28.0 is **not used**: it imports `Crypto` from the `effect` root, which 4.1.0 does not have, so Vite cannot load a config that uses it. Lead decision: stay on 4.1.0 with the plugin off until a release imports `effect/crypto`; the steps to re-enable it are in [issue #4](https://github.com/reebeat/studio/issues/4), which retires this note. An upgrade of Effect or Foldkit is its own spec.
+
+## Distribution
+
+Spec [0004](docs/specs/0004-distribution.md). `apps/launcher` is the single binary: `bun run build` embeds the built editor and compiles it for the host (`apps/launcher/dist/reebeat-studio`, local use only: the Nix-patched Bun gives it a Nix ELF interpreter); CI builds the five release targets and checksums them. It serves read-only on `127.0.0.1` and a random port, and `--check` verifies it. The web deploy (`apps/editor/alchemy.run.ts`, `.github/workflows/preview.yml`, `scripts/wizards/cloudflareWebDeploy.sh`) is written and **inert** until an Alchemy release contains alchemy-run/alchemy#2754; spec 0004 says how to unblock it. Do not add `alchemy` to `package.json` before that.
 
 ## Conventions
 
