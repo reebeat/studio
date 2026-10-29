@@ -1,6 +1,6 @@
 # 0002 Collaboration spike: which CRDT, which edit model, what to do with an invalid merge, where the sync server runs
 
-Status: **spike report** (a measured recommendation; it builds nothing in `apps/`). Frozen when its PR opens; later changes are dated entries under Revisions. Date: 2026-10-29. Decided by: the lead's assignment of 2026-10-29 (questions 1 to 5 below); the recommendation is the spike's, and the one choice that is the operator's is listed under "Open questions".
+Status: **spike report** (a measured recommendation; it builds nothing in `apps/`). Frozen when its PR opens; later changes are dated entries under Revisions. Date: 2026-10-29. Decided by: the lead's assignment of 2026-10-29 (questions 1 to 5 below); the recommendation is the spike's; the operator decided the library and the edit model on 2026-10-29 (see Decisions), and one choice remains open (see Open questions).
 Process: [spec 0000](0000-development-lifecycle.md). Builds on [spec 0001](0001-first-felt-journey.md), which fixes "the replicated unit is the patch" and leaves the sync design to its own spec; this is the evidence for that spec. The IR shape is read from reebeat's branch `feat/0004-state-machines` at commit `a01bb39` (committed state only; the worktree had uncommitted changes that were not used), read-only.
 
 ## Problem
@@ -19,7 +19,7 @@ Studio is a collaborative editor, and its first paid feature is a multiplayer sy
 
 | Decision | Recommendation | Why (the numbers are below) |
 | --- | --- | --- |
-| **Library** | **Loro** (`loro-crdt` 1.17.1, MIT), behind a ten-method document port (`Doc`, written for this spike), so Yjs or Automerge can replace it. The operator owns this fork (see Open questions) | All three merged every case to the same valid-or-invalid result except two cases (a4, b3), and the keyed model removes the first of those. So the choice rests on what the editor needs around the merge: Loro has the cheapest per-field author (`getLastEditor`), change messages, `forkAt` for agent proposals, a movable list, the fastest document load (2 to 6 ms for 370 KiB on the scaled story, against 166 ms for Automerge and 16 to 29 ms for Yjs) and a 6.8 KiB (brotli) JS glue. Its costs: the youngest of the three (2022), a 0.84 MB (brotli) wasm, a saved document 1.4 times the JSON, and no turnkey Durable Object server |
+| **Library** | **Loro** (`loro-crdt` 1.17.1, MIT), behind a ten-method document port (`Doc`, written for this spike), so Yjs or Automerge can replace it. **Decided by the operator, 2026-10-29** (see Decisions) | All three merged every case to the same valid-or-invalid result except two cases (a4, b3), and the keyed model removes the first of those. So the choice rests on what the editor needs around the merge: Loro has the cheapest per-field author (`getLastEditor`), change messages, `forkAt` for agent proposals, a movable list, the fastest document load (1.4 to 2.1 ms for 370 to 410 KiB on the scaled story, against 138 ms for Automerge and 13 to 20 ms for Yjs) and a 6.8 KiB (brotli) JS glue. Its costs: the youngest of the three (2022), a 0.84 MB (brotli) wasm, a saved document 1.4 times the JSON, and no turnkey Durable Object server |
 | **Edit model** | **Keyed document, IR as a pure projection.** Every array of objects that has an id becomes a map keyed by an immutable uid with a `pos` for order; one story-wide registry holds the name of each Element (the IR `id`); references hold the uid; data the IR repeats (`chapter.sceneIds`, line ids) is derived, not stored. Edits are made by id, as spec 0001 already says for tools | 31 of 57 library-by-case runs on the naive IR-shaped document were invalid IRs; 17 of 57 on the keyed one. Rename, reorder and curve-order failures vanish; the 17 left are conflicts of intent |
 | **Invalid merges** | **Three layers.** (1) Keyed ids and derived data (above). (2) An authoritative validation gate in the Durable Object that refuses a change set whose merge is not a valid IR, with the reason, so the author rebases. (3) A pure, deterministic repair function that is shown as a proposal (a compensating patch with the system as author), never applied silently | The gate refused an edit in 17 of the 17 invalid keyed outcomes and in none of the valid ones; the repair made 15 of the 17 valid and cannot make the other two valid (a semantic conflict: an Element left hidden and never revealed) |
 | **Determinism** | Holds for all three. Compare **the IR text** (written by 0004's `jsonCodec`), never the library's saved bytes | 200 random replays per library and model, 0 differing JSON texts, equal across processes and across Bun and Node. The saved bytes differ for Automerge in every replay and for Yjs in about 5 percent |
@@ -28,7 +28,7 @@ Studio is a collaborative editor, and its first paid feature is a multiplayer sy
 
 ## Method
 
-Everything below was built and run in a scratch directory outside this repository; the code is throwaway and is not committed (the assignment commits only this report). Pins: `yjs` 13.6.33, `@automerge/automerge` 3.5.0, `loro-crdt` 1.17.1, `effect` 4.1.0, `miniflare` 4.20260730.0, Bun 1.3.13, Node 24.21. Each case, count and command below can be rebuilt from this text.
+Everything below was built and run from the code in [`spike/collab/`](https://github.com/reebeat/studio/tree/spike/collaboration-code/spike/collab) on branch `spike/collaboration-code` (commit `b43f82b57b1c57ce993e89c2d32e090558aad91a`). It is throwaway measurement code, not part of the product's gates; its [README](https://github.com/reebeat/studio/blob/spike/collaboration-code/spike/collab/README.md) maps each number below to the command that makes it and to the raw output committed in `spike/collab/output/`. Pins: `yjs` 13.6.33, `@automerge/automerge` 3.5.0, `loro-crdt` 1.17.1, `effect` 4.1.0, `miniflare` 4.20260730.0, Bun 1.3.13, Node 24.21.
 
 - **The IR is the real one.** `GraphSchema`, `validateScene` and `jsonCodec` are the code of reebeat `a01bb39` (a copy of `packages/core/src`, unchanged). The story is `stories/same-id` (seven scenes), imported with the real Fountain importer (the fixture's SHA-256 is `6a71b9fa2f96837034b0cffd6c90023c4d374f2ad75e55a7151308f3f50b8e9e`), so the document has real Elements, effects, derived events (`let`) and chapters. A merged document is **valid** when `GraphSchema` decodes it, `validateScene` finds nothing in any scene (with the identity diff against the previous scene, as `planScenes` computes it), and a small stand-in for invariants 0004 does not state finds nothing.
 - **Stand-ins, named.** 0004 has no attribute curves and no numeric position yet (the decided IR will: "attributes are data curves over time"). Element `one` of scene `sc4` carries two stand-in fields for the spike: `at: {x, y}` and `curves.opacity`, four control points `(t, v)`, with the invariants that `t` starts at 0, ends at 1 and strictly increases. Two derived events `p` and `q` were added to `sc4` for the cycle case. `GraphSchema` is closed, so these fields are removed before it decodes the document and are checked on their own.
@@ -154,7 +154,7 @@ Three peers make random editor operations (class, cell, text, add effect, rename
 
 ## Measurements: sizes and timings
 
-All single runs on a shared workstation (memory pressure low); the order of magnitude is the finding, not the last digit. Automerge is measured in its two string modes: the default (every string collaborative text) and `ImmutableString` (every string a scalar, which is what ids and enums should be). Spike numbers below use the latter unless marked "text".
+All single runs on a shared workstation (memory pressure low); the order of magnitude is the finding, not the last digit. Automerge is measured in its two string modes: the default (every string collaborative text) and `ImmutableString` (every string a scalar, which is what ids and enums should be). Spike numbers below use the latter unless marked "text". Source: `spike/collab/output/sizes.txt` and `sizes-am-text.txt`.
 
 The real story (7 scenes) as JSON: 8.7 KiB (gzip 2.2, brotli 1.8 KiB). The scaled story (the real story repeated 30 times, 210 scenes, ids suffixed): 262.6 KiB (gzip 9.7, brotli 4.1 KiB).
 
@@ -163,26 +163,26 @@ The real story (7 scenes) as JSON: 8.7 KiB (gzip 2.2, brotli 1.8 KiB). The scale
 | | Real story | Scaled story |
 | --- | --- | --- |
 | Yjs | 10.1 (3.2) / 11.1 (3.3) | 309 (33) / 345 (37) |
-| Automerge | 3.3 (3.2) / 3.4 (3.4); text: 6.6 / 6.8 | 27.2 (25.8) / 28.6 (27.2); text: 126 / 119 |
+| Automerge | 3.3 (3.2) / 3.4 (3.4); text: 6.6 / 6.8 | 27.2 (25.7) / 28.6 (27.2); text: 126 / 119 |
 | Loro | 13.9 (9.7) / 15.2 (10.5) | 371 (173) / 408 (186) |
 
 **Time (ms), scaled story, keyed model:**
 
 | | Build from JSON | Load from saved bytes | Materialise JSON | Project to IR |
 | --- | --- | --- | --- | --- |
-| Yjs | 15 | 16 | 4.8 | 3.8 |
-| Automerge | 189 (text: 341) | 160 (text: 293) | 5.2 | 2.5 |
-| Loro | 145 | 5.8 | 74 | 13 |
+| Yjs | 12 | 13 | 3.2 | 2.8 |
+| Automerge | 186 (text: 278) | 138 (text: 285) | 6.6 | 2.8 |
+| Loro | 75 | 2.1 | 27.8 | 2.4 |
 
-Merge of 300 random operations of one replica into another (scaled, keyed): Yjs 3.5 to 4.5 ms (update 9.4 KiB), Automerge 33 ms (text: 60; update 45.5 KiB, text: 56.6), Loro 8.4 to 9.1 ms (update 7.4 KiB).
+Merge of 300 random operations of one replica into another (scaled, keyed): Yjs 4.0 to 4.6 ms (update 9.4 KiB), Automerge 31.6 ms (text: 55.6; update 45.5 KiB, text: 56.6), Loro 8.2 to 12.1 ms (update 7.4 KiB).
 
-**History growth**, 5,000 single-field edits on the real story, keyed: Yjs 11.1 to 34.9 KiB (garbage collection on); Automerge 3.4 to 23.2 KiB (text: 68.4); Loro 15.2 to 38.3 KiB, and 10.3 KiB for the same state with its history dropped (`shallow-snapshot`). Time per edit, including the read of the replica's JSON: Yjs 0.14 ms, Automerge 0.46 ms, Loro 0.96 ms.
+**History growth**, 5,000 single-field edits on the real story, keyed: Yjs 11.1 to 34.9 KiB (garbage collection on); Automerge 3.4 to 23.2 KiB (text: 68.4); Loro 15.2 to 38.3 KiB, and 10.3 KiB for the same state with its history dropped (`shallow-snapshot`). Time per edit, including the read of the replica's JSON: Yjs 0.11 ms, Automerge 0.43 ms (text: 0.46), Loro 0.77 ms.
 
 Reading: Yjs is smallest in JS and fastest overall; Automerge's file is the smallest and its load is the slowest (a Durable Object that wakes pays that on every cold start); Loro loads fastest and merges quickly but materialises the whole JSON slowly (an editor must read through events or a subtree, not the whole document on every change).
 
 ## Recommendation
 
-**Library: Loro, behind the `Doc` port.** The deciding reasons are the ones the editor needs and Yjs lacks: a public per-field author and change messages (attribution as spec 0001 and the lenses note need it), cheap forks and `forkAt` for suggestions and agent proposals without turning garbage collection off (a fourfold growth in Yjs), a movable list, and the fastest cold load for a Durable Object. The trade is maturity and ecosystem: Yjs is older by eight years and has a Cloudflare-maintained Durable Object server; Loro's sync servers are young. The port and the keyed model make the choice reversible: the same 19 cases and the same model ran unchanged on all three. **Fallback and trigger:** choose Yjs instead if the operator weighs maturity and a turnkey `y-partyserver` above attribution and branching; choose Automerge if document size and offline history matter more than load time and its collaborative-string default can be worked around (it needs `ImmutableString` for every scalar).
+**Library: Loro, behind the `Doc` port** (decided by the operator, see Decisions). The deciding reasons are the ones the editor needs and Yjs lacks: a public per-field author and change messages (attribution as spec 0001 and the lenses note need it), cheap forks and `forkAt` for suggestions and agent proposals without turning garbage collection off (a fourfold growth in Yjs), a movable list, and the fastest cold load for a Durable Object. The trade is maturity and ecosystem: Yjs is older by eight years and has a Cloudflare-maintained Durable Object server; Loro's sync servers are young. The port and the keyed model make the choice reversible: the same 19 cases and the same model ran unchanged on all three. **Fallback and trigger:** choose Yjs instead if maturity and a turnkey `y-partyserver` come to weigh more than attribution and branching; choose Automerge if document size and offline history matter more than load time and its collaborative-string default can be worked around (it needs `ImmutableString` for every scalar).
 
 **Edit model: keyed document, IR as projection**, as in the table at the top. Concretely: scenes, Elements, effects, derived events, lines, chapters and curve points are maps keyed by uid; an Element's story-wide identity is one registry entry (rename is one write; a new instance of the Element in a scene is a new key under the same uid); order is a `pos` field, ties broken by uid; the IR is `project(document)`, a pure function, written by `jsonCodec`; derived repeats are not stored. Position as one atomic value if a position must never be torn. Edits are by id. New ids carry the minting peer, so two peers never mint the same one (this does not stop two peers choosing the same *name*: c2, d4).
 
@@ -190,13 +190,17 @@ Reading: Yjs is smallest in JS and fastest overall; Automerge's file is the smal
 
 **Server: a Durable Object per story, Hibernation, SQLite log with compaction, gate inside.** Chunk snapshots over 2 MB. The free tier is the same document in a file with no server. Cloud-hosted agents are peers of the same room. This is the paid feature of spec 0001; everything else in this report runs locally.
 
-**Consequence for spec 0001.** Its line "the unit that is replicated is the patch" changes to "the unit that is replicated is the library's update; the patch describes the edit" (review, proposal, tool protocol, undo as a computed inverse). Its single writer and `baseRevision` check remain the right design for the free local tools; with a merge-based document the revision is the hash of the projected IR (as now) and a stale base is not an error but a merge. A decision is needed from the lead before the sync spec: whether the sync spec keeps one writer (simpler, offline editing impossible) or adopts the merge-based scheme (this report's evidence).
+**Consequence for spec 0001.** Its line "the unit that is replicated is the patch" changes to "the unit that is replicated is the library's update; the patch describes the edit" (review, proposal, tool protocol, undo as a computed inverse). Its single writer and `baseRevision` check remain the right design for the free local tools; with a merge-based document the revision is the hash of the projected IR (as now) and a stale base is not an error but a merge. The operator chose the merge-based document (Decisions).
+
+## Decisions
+
+- **2026-10-29, the operator** (relayed by the lead): the **edit model** is a merge-based keyed document with a validation gate in the sync server, the Durable Object; a repair is offered as a proposal and never applied without a person. The **library** is Loro, behind the ten-method document port. These close the former open questions 1 (library) and 2 (one writer or a merge). The consequence for spec 0001 stands as written under Recommendation: the replicated unit is the library's update and the patch describes the edit. The sync spec is written against this document.
 
 ## Falsifiers (each with its control)
 
 | Claim | The check | Negative control, observed |
 | --- | --- | --- |
-| A merged document is judged by the real IR, not a stand-in | `GraphSchema` decode plus `validateScene` per scene (with the identity diff) on the merged view | Deleting `tag` from `sc4` without its dependants gives `UnknownReference` and `NoSuchEvent`; making `p` and `q` wait for each other gives `EffectCycle`; the unchanged story is valid |
+| A merged document is judged by the real IR, not a stand-in | `GraphSchema` decode plus `validateScene` per scene (with the identity diff) on the merged view | Deleting `tag` from `sc4` without its dependants gives `NoSuchEvent`; making `p` and `q` wait for each other gives `EffectCycle`; the unchanged story is valid |
 | The validator is not blind | The stand-in checks | A duplicate Element id in a scene is accepted by `validateScene` (the control run) and rejected by the stand-in `DuplicateElementId`; a curve with a crossing point is rejected by the stand-in |
 | All replicas converge | Canonical JSON of both peers after a two-way merge | Before the merge the two peers' documents differ in all three libraries (each had made one edit); after it, 114 of 114 runs were equal |
 | Determinism holds over orders | 200 random replays per library and model, canonical JSON, IR text, raw JSON | Withholding the last update changes the document in all three libraries |
@@ -220,10 +224,10 @@ When the IR becomes the committed source, some invariants are held by the Founta
 
 ## Open questions for the operator
 
-1. **The library.** Loro (attribution, forks, fast load, young) against Yjs (mature, a turnkey Durable Object server, weak attribution and branching) against Automerge (smallest file, slowest load, mature, alpha sync tooling). The recommendation is Loro behind a port; this is a preference about risk that is yours to fix.
-2. **One writer or a merge.** Whether the sync spec keeps spec 0001's single writer with `baseRevision`, or adopts a merge-based document. The evidence here supports a merge-based document for offline and agent work.
-3. **Property-wise or atomic merge** for position and curve points (a2, e3 against a3).
+1. **Property-wise or atomic merge** for position and curve points (a2, e3 against a3). Questions about the library and about one writer against a merge are closed (Decisions).
 
 ## Revisions
 
 - **2026-10-29, written** after the measurements; no earlier plan.
+- **2026-10-29, evidence code committed** (commit `b43f82b57b1c57ce993e89c2d32e090558aad91a` on branch `spike/collaboration-code`, `spike/collab/`). Every number now cites a command and its committed raw output (`spike/collab/README.md`). Timings were re-measured from those committed outputs and replace the first run's: Loro loads in 1.4 to 2.1 ms (not 2 to 6), Automerge 138 ms (not 160), Yjs 13 to 20 ms; Loro materialises JSON in 28 ms (not 74); merges and times per edit changed by under a factor of 1.5. Sizes in bytes and every count are unchanged. One falsifier row is corrected: the pinned story has no `f2` and `settled`, so deleting `tag` without its dependants gives `NoSuchEvent` only, not `UnknownReference` as well.
+- **2026-10-29, operator decisions recorded** (see Decisions). Open questions 1 and 2 are closed.
