@@ -29,7 +29,7 @@ stop:   after round 3, unless an open finding is critical or high (then keep goi
 - A PR carries its spec and its code together. The spec is frozen when the PR opens; later changes to it are dated entries in its Revisions section.
 - Create a separate detached worktree per reviewer or fixer role with **`/run/current-system/sw/bin/git worktree add --detach .worktrees/pr-$N-<role> origin/<head branch>`** (no local branch). The harness rewrites a bare `git worktree` into `omp worktree`, which once copied `.worktrees/` into itself (189 to 215 GB). Remove each worktree when its role ends. The `verify-studio` run of a reviewer uses its own worktree: parallel reviewers never share one.
 - Read the PR body, its spec in `docs/specs/` (falsifiers and Revisions), and `git diff --stat origin/<base>...HEAD`. A PR stacked on another PR's branch is reviewed at its head, against its base.
-- Read memory pressure before a heavy job: `cat /proc/pressure/memory` (the `some avg10` figure above about 10 means wait). `verify-studio`'s `headroom.sh` gates its own runs.
+- Check the machine before a heavy job (a build, a browser run, `bun run ready`): `.agents/skills/verify-studio/scripts/headroom.sh` applies the operator's limits (`MemAvailable` after the job's demand at least 20% of RAM, swap-in under 1000 pages per second, memory PSI `full` avg60 under 10%, load average under the CPU threads). Wait while it says `SHORT`.
 
 ## 2. Review round: two independent reviewers, in parallel
 

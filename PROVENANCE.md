@@ -31,7 +31,7 @@ Not copied: `tools/quality/checkTiers.ts`, `tiers.ts`, `genGrammar.ts`, `grammar
 
 | File | Source | Deviation |
 | --- | --- | --- |
-| `.agents/skills/verify-studio/scripts/headroom.sh`, `lib.sh` | `phibkro/vektorprogrammet-reimagined` @ `1104c3019a76c619c4c8e9ee04c71ce191467ed4`, `.agents/skills/verify-vektorprogrammet/scripts/` | adapted: no database, CMS or overlay; smaller demand figures; memory PSI is a gate; studio's names |
+| `.agents/skills/verify-studio/scripts/headroom.sh`, `lib.sh` | `phibkro/vektorprogrammet-reimagined` @ `1104c3019a76c619c4c8e9ee04c71ce191467ed4`, `.agents/skills/verify-vektorprogrammet/scripts/` | adapted: no database, CMS or overlay; smaller demand figures; the donor's CPU, swap and device gates replaced by the operator's four limits of 2026-10-29 (memory, swap-in, memory PSI `full` avg60, load); `PROC_ROOT` and `HEADROOM_NPROC` let the test inject samples; studio's names |
 | `.agents/skills/verify-studio/scripts/launch.sh`, `doctor.sh`, `cleanup.sh`, `page.sh` | same directory (the same shape: launch, doctor, drive, cleanup) | written for this repository: one Vite app served by `vp preview` or `vp dev`; headless Chromium for the doctor and `page.sh` |
 | `.agents/skills/verify-studio/SKILL.md`, `features/` | `.agents/skills/verify-vektorprogrammet/SKILL.md` and `features/README.md` | the layout (Launch, Doctor, Drive, Evidence, Cleanup, path table, feature map with a "how to observe" and "broken when" per entry); the content is this repository's |
 | `tools/quality/featureMap.ts`, `test/featureMap.test.ts`, `test/recordRound.test.ts` | none | original; the idea that a fact the skill relies on is pinned by a check that fails on drift is the donor's `verify-membership-writes` |

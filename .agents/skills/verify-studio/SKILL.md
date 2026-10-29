@@ -33,9 +33,9 @@ Paths below are relative to this skill's directory, `.agents/skills/verify-studi
 
 Run it under a supervisor that keeps custody and waits for the ready line; never background it with `nohup`, `setsid` or `&`. In OMP: the `bash` tool with a `name` (for example `verify-studio-pr7`) and `ready: { "log": "VERIFY READY", "timeout": 240 }`.
 
-In order: refuses a second live run for the worktree; runs `headroom.sh` (CPU idle, `MemAvailable`, memory PSI, swap, swap-in rate, device busy time, free disk, each with at least 20% left after the job's demand; short on any → exit 1 and it names which; `VERIFY_FORCE=1` skips it and the report records that); installs dependencies in a fresh worktree; creates the run directory and a per-worktree pointer **before** starting anything, so `cleanup.sh` finds the run even if the server never comes up; builds (preview); serves; runs the doctor. **Ready means usable.** A build that fails stops the launch: that is a finding, with the log in `serve.log`.
+In order: refuses a second live run for the worktree; runs `headroom.sh` (the operator's limits of 2026-10-29: `MemAvailable` after the job's demand at least 20% of RAM, swap-in under 1000 pages per second over a 10 s sample, memory PSI `full` avg60 under 10%, 1-minute load average under the CPU threads, and free disk for the job's writes; short on any → exit 1 and it names each one; `VERIFY_FORCE=1` skips it and the report records that); installs dependencies in a fresh worktree; creates the run directory and a per-worktree pointer **before** starting anything, so `cleanup.sh` finds the run even if the server never comes up; builds (preview); serves; runs the doctor. **Ready means usable.** A build that fails stops the launch: that is a finding, with the log in `serve.log`. Back off your own job if PSI `full` avg60 stays above 20%, or swap-in stays above its limit, for a minute.
 
-Knobs: `VERIFY_TREE`, `VERIFY_PR` (names the run directory `<UTC date>-pr<N>`, else the short sha), `VERIFY_EVIDENCE_ROOT` (default `~/.local/state/reebeat-studio-verify`), `VERIFY_FORCE=1`, and `DEMAND_CPUS` / `DEMAND_MEM_MIB` / `DEMAND_DISK_MIB` / `PSI_MEMORY_MAX` for `headroom.sh`. Never drive an origin this run did not print.
+Knobs: `VERIFY_TREE`, `VERIFY_PR` (names the run directory `<UTC date>-pr<N>`, else the short sha), `VERIFY_EVIDENCE_ROOT` (default `~/.local/state/reebeat-studio-verify`), `VERIFY_FORCE=1`, and `DEMAND_MEM_MIB` / `DEMAND_DISK_MIB` / `SAMPLE_SECONDS` for `headroom.sh`. Never drive an origin this run did not print.
 
 ## Doctor
 
@@ -96,7 +96,7 @@ Stop the supervised launch (OMP: kill the named bash job) or let `scripts/cleanu
    VERIFY_TREE=$PWD/.worktrees/pr-$N-verify VERIFY_PR=$N .agents/skills/verify-studio/scripts/launch.sh   # supervised
    ```
 
-   Read `cat /proc/pressure/memory` first when other jobs are running. Use `git diff --name-only origin/<base>...HEAD` for the changed paths.
+   Run `.agents/skills/verify-studio/scripts/headroom.sh` first when other jobs are running (launch runs it too). Use `git diff --name-only origin/<base>...HEAD` for the changed paths.
 
 2. **Pick the entries from the changed paths:**
 
