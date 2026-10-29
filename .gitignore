@@ -6,3 +6,5 @@ dist/
 coverage/
 *.log
 .DS_Store
+# Written by apps/launcher/scripts/embed.ts before the binary is compiled.
+apps/launcher/embedded/

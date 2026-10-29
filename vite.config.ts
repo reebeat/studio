@@ -42,6 +42,43 @@ const effectConfig: EffectConfigInput = {
       strictness: "strict",
     },
     {
+      // The launcher's roots: the two entries that choose the files and run the program, and the embed script.
+      files: [
+        "apps/launcher/src/dev.ts",
+        "apps/launcher/src/compiled.ts",
+        "apps/launcher/scripts/**",
+      ],
+      platform: "bun",
+      role: "composition-root",
+      strictness: "strict",
+    },
+    {
+      // The two modules that touch the host: the Bun server layer, and the ambient `process.platform` (see its header).
+      files: [
+        "apps/launcher/src/bunServer.ts",
+        "apps/launcher/src/hostPlatform.ts",
+      ],
+      platform: "bun",
+      role: "runtime-adapter",
+      strictness: "strict",
+    },
+    {
+      // The launcher's services and handlers: the files it serves, the request handler, the browser opener, the check
+      // and the program. Listed by name so that no file belongs to two groups (a file in two gets both roles' rules).
+      files: [
+        "apps/launcher/src/assetStore.ts",
+        "apps/launcher/src/browser.ts",
+        "apps/launcher/src/check.ts",
+        "apps/launcher/src/cli.ts",
+        "apps/launcher/src/exitCode.ts",
+        "apps/launcher/src/routing.ts",
+        "apps/launcher/src/server.ts",
+      ],
+      platform: "bun",
+      role: "effect-library",
+      strictness: "strict",
+    },
+    {
       files: ["tools/quality/**"],
       platform: "node",
       role: "composition-root",
@@ -89,9 +126,11 @@ export default defineConfig({
   lint: {
     extends: [core, antiSlop, strict, effectNative],
     // The vendored anti-slop rules keep their upstream style; they are checked by their own provenance, not ours.
+    // `alchemy.run.ts` imports a package that is not installed until an Alchemy release supports effect 4.1 (spec 0004).
     ignorePatterns: [
       ...(core.ignorePatterns ?? []),
       "tools/oxlint/anti-slop/**",
+      "apps/editor/alchemy.run.ts",
     ],
     jsPlugins: [
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
@@ -108,7 +147,11 @@ export default defineConfig({
       ...effectConfigResult.overrides,
       {
         // unicorn/throw-new-error treats Schema.TaggedError class definitions as throw sites; they contain no throw.
-        files: ["tools/quality/effectExceptions.ts"],
+        files: [
+          "tools/quality/effectExceptions.ts",
+          "apps/launcher/src/browser.ts",
+          "apps/launcher/src/check.ts",
+        ],
         rules: { "unicorn/throw-new-error": "off" },
       },
       {
