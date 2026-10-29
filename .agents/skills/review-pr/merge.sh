@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Provenance: copied from phibkro/vektorprogrammet-reimagined @ 797e9e41d96194b9479ff224ac1c40bbc0545888 (.agents/skills/review-pr/merge.sh), unchanged.
+# Provenance: copied from phibkro/vektorprogrammet-reimagined @ 1104c3019a76c619c4c8e9ee04c71ce191467ed4 (.agents/skills/review-pr/merge.sh), unchanged (identical at 797e9e41).
 # merge.sh <pr> "<squash subject>": refuse unless a review round recorded by record-round.sh passed the PR's
 # current head; wait for CI green on that head; if main moved, require no overlapping files (merge-tree check);
 # then squash-merge. Run from the main checkout.
