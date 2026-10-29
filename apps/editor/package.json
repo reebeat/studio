@@ -1,0 +1,26 @@
+{
+  "name": "@reebeat-studio/editor",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview",
+    "test": "vp test run"
+  },
+  "dependencies": {
+    "@effect/platform-browser": "catalog:",
+    "@foldkit/ui": "catalog:",
+    "effect": "catalog:",
+    "foldkit": "catalog:"
+  },
+  "devDependencies": {
+    "@effect/vitest": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "happy-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}
