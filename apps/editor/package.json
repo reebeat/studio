@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@effect/vitest": "catalog:",
+    "@foldkit/vite-plugin": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "happy-dom": "catalog:",
     "tailwindcss": "catalog:",
