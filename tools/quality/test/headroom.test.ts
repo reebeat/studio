@@ -43,7 +43,15 @@ const gates = (stdout: string) => ({
   }),
 });
 
-const run = (sample: Sample) =>
+// A file's replacement content, or null to leave the file out.
+interface Overrides {
+  readonly meminfo?: string | null;
+  readonly vmstat?: string | null;
+  readonly loadavg?: string | null;
+  readonly memoryPressure?: string | null;
+}
+
+const run = (sample: Sample, overrides: Overrides = {}) =>
   Effect.gen(function* runHeadroom() {
     const { dir, fs, path, root, spawner, systemPath } = yield* scriptHarness;
 
@@ -59,17 +67,31 @@ const run = (sample: Sample) =>
     yield* fs.writeFileString(path.join(dir, "bin", "sleep"), stubSleep, {
       mode: 0o755,
     });
-    yield* fs.writeFileString(
-      path.join(proc, "meminfo"),
+
+    // `undefined` keeps the healthy default, a string replaces the file, `null` leaves the file out.
+    const write = (
+      name: string,
+      override: string | null | undefined,
+      fallback: string
+    ) =>
+      override === null
+        ? Effect.void
+        : fs.writeFileString(path.join(proc, name), override ?? fallback);
+
+    yield* write(
+      "meminfo",
+      overrides.meminfo,
       `MemTotal: ${memTotalMiB * 1024} kB\nMemAvailable: ${sample.memAvailMiB * 1024} kB\n`
     );
-    yield* fs.writeFileString(path.join(proc, "vmstat"), "pswpin 1000\n");
-    yield* fs.writeFileString(
-      path.join(proc, "loadavg"),
+    yield* write("vmstat", overrides.vmstat, "pswpin 1000\n");
+    yield* write(
+      "loadavg",
+      overrides.loadavg,
       `${sample.load1} 1.00 1.00 1/100 1\n`
     );
-    yield* fs.writeFileString(
-      path.join(proc, "pressure", "memory"),
+    yield* write(
+      "pressure/memory",
+      overrides.memoryPressure,
       `some avg10=50.00 avg60=50.00 avg300=50.00 total=1\nfull avg10=${sample.psiFullAvg10} avg60=${sample.psiFullAvg60} avg300=0.00 total=1\n`
     );
 
@@ -173,5 +195,32 @@ describe("headroom.sh gates (injected /proc samples)", () => {
         }
       );
     })
+  );
+
+  // A gate whose sample cannot be read is short (round 1 of PR #5): the file is missing, empty, or not a number.
+  it.effect(
+    "unreadable samples: a missing, empty or non-numeric file makes that gate short, one control per gate",
+    () =>
+      Effect.gen(function* unreadable() {
+        const cases: readonly (readonly [string, Overrides])[] = [
+          ["memory", { meminfo: null }],
+          ["memory", { meminfo: "MemTotal: lots kB\nMemAvailable: 1 kB\n" }],
+          ["swap-in", { vmstat: null }],
+          ["swap-in", { vmstat: "pswpin many\n" }],
+          ["memory PSI", { memoryPressure: null }],
+          ["memory PSI", { memoryPressure: "" }],
+          ["memory PSI", { memoryPressure: "full avg10=x avg60=n/a\n" }],
+          ["load", { loadavg: null }],
+          ["load", { loadavg: "\n" }],
+          ["load", { loadavg: "unknown 1 1\n" }],
+        ];
+
+        for (const [gate, overrides] of cases) {
+          assert.deepStrictEqual(yield* run(healthy, overrides), {
+            exitCode: 1,
+            short: [gate],
+          });
+        }
+      })
   );
 });

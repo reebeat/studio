@@ -25,8 +25,8 @@ Read by each reviewer of a round (see `SKILL.md`). You report; you do not edit p
 
 | Severity | Meaning | Examples |
 | --- | --- | --- |
-| critical | a leaked secret or personal data, or a broken `main` once merged | a key in a fixture; a gate that always passes |
-| high | a spec falsifier is not met | a control that does not fail; `ready` red on the head |
+| critical | data loss, a security hole, a leaked secret or personal data, or a broken `main` once merged | an unguarded write; a key in a fixture; a gate that always passes |
+| high | a spec falsifier is not met, or behaviour a user relies on is wrong | a control that does not fail; `ready` red on the head; a button that does nothing |
 | medium | a rule of `AGENTS.md` broken, evidence that does not match the branch, a number without its script, raw output and command, any (c) finding, or a verify skill out of step (`maintenance`) | a suppression without an entry; undeclared scope; a Revisions entry missing; a feature with no map entry; a UI change with no browser run |
 | low | clarity or maintainability with no behavioural effect | a misleading name or comment |
 | nit | taste | none |
