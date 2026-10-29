@@ -10,7 +10,7 @@ Next:
 
 - Merge spec 0000 after its review round.
 - Spec 0001 starts when reebeat's story IR is stable (0004 merged, 0005 done, 0006 makes the committed story source the IR JSON). Until then no editing feature is built against the IR.
-- Follow-up to 0000: retire the Effect 4.0.0 peer note and add `@foldkit/vite-plugin` back when a Foldkit release lists Effect 4.1.0 (see `AGENTS.md`, "Effect and Foldkit").
+- Follow-up to 0000: re-enable `@foldkit/vite-plugin` when a release imports `effect/crypto` (issue #4), and drop the Effect 4.0.0 peer note then (see `AGENTS.md`, "Effect and Foldkit").
 
 Blocked:
 
