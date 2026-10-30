@@ -9,7 +9,7 @@ describe("view", () => {
     scene(
       { update, view },
       given(expanded),
-      expect(role("heading", { name: "reebeat studio" })).toExist(),
+      expect(role("heading", { name: "tsukuri studio" })).toExist(),
       expect(role("region", { name: "Story graph" })).toExist(),
       expect(role("region", { name: "Preview" })).toExist(),
       expect(role("region", { name: "Timeline" })).toExist(),

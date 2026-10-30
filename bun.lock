@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "reebeat-studio",
+      "name": "tsukuri-studio",
       "devDependencies": {
         "@commitlint/cli": "21.2.3",
         "@commitlint/config-conventional": "21.2.3",
@@ -21,7 +21,7 @@
       },
     },
     "apps/editor": {
-      "name": "@reebeat-studio/editor",
+      "name": "@tsukuri-studio/editor",
       "version": "0.0.0",
       "dependencies": {
         "@effect/platform-browser": "catalog:",
@@ -40,7 +40,7 @@
       },
     },
     "tools/quality": {
-      "name": "@reebeat-studio/quality",
+      "name": "@tsukuri-studio/quality",
       "version": "0.0.0",
       "dependencies": {
         "@effect/platform-node": "catalog:",
@@ -383,9 +383,9 @@
 
     "@redis/time-series": ["@redis/time-series@6.3.1", "", { "peerDependencies": { "@redis/client": "^6.3.1" } }, "sha512-MNDgrm+i63M/1a+XA+HcDsScwt4uBh/fGGJ84swTQZTFK5K5wMmxdlTRa4ZgmNJzjxMaszW/ipPScMUGV3aAMg=="],
 
-    "@reebeat-studio/editor": ["@reebeat-studio/editor@workspace:apps/editor"],
+    "@tsukuri-studio/editor": ["@tsukuri-studio/editor@workspace:apps/editor"],
 
-    "@reebeat-studio/quality": ["@reebeat-studio/quality@workspace:tools/quality"],
+    "@tsukuri-studio/quality": ["@tsukuri-studio/quality@workspace:tools/quality"],
 
     "@sec-ant/readable-stream": ["@sec-ant/readable-stream@0.4.1", "", {}, "sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg=="],
 

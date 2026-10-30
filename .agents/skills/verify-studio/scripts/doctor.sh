@@ -24,11 +24,11 @@ done
 
 # The server answers with the app's document.
 page="$(curl -fs "$VERIFY_ORIGIN/" || true)"
-grep -q '<title>reebeat studio</title>' <<<"$page" || fail "/ does not answer with <title>reebeat studio</title>"
+grep -q '<title>tsukuri studio</title>' <<<"$page" || fail "/ does not answer with <title>tsukuri studio</title>"
 
 # The app boots in a real browser: the Foldkit runtime rendered the heading and the four regions.
 dom="$(chromium_headless --virtual-time-budget=5000 --dump-dom "$VERIFY_ORIGIN/" 2>/dev/null || true)"
-grep -q '<h1[^>]*>reebeat studio</h1>' <<<"$dom" || fail "the rendered page has no h1 \"reebeat studio\" (the runtime did not boot)"
+grep -q '<h1[^>]*>tsukuri studio</h1>' <<<"$dom" || fail "the rendered page has no h1 \"tsukuri studio\" (the runtime did not boot)"
 for region in "Story graph" "Preview" "Timeline"; do
   grep -q "aria-label=\"$region\"" <<<"$dom" || fail "the rendered page has no region \"$region\""
 done

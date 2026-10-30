@@ -110,10 +110,10 @@ describe("one @effect/tsgo for the repository", () => {
   );
 
   it("negative control: a workspace package locked at another version is named with the version of the root", () => {
-    const lock = `${entry("@effect/tsgo", "0.63.0")}${nested("@reebeat/quality", "0.53.1")}`;
+    const lock = `${entry("@effect/tsgo", "0.63.0")}${nested("@tsukuri/quality", "0.53.1")}`;
 
     assert.deepStrictEqual(tsgoDrift(lock), [
-      "@effect/tsgo is locked at 0.53.1 under @reebeat/quality, at 0.63.0 at the root",
+      "@effect/tsgo is locked at 0.53.1 under @tsukuri/quality, at 0.63.0 at the root",
     ]);
   });
 
@@ -121,7 +121,7 @@ describe("one @effect/tsgo for the repository", () => {
     "negative control: the same drift added to the real bun.lock is reported",
     () =>
       Effect.gen(function* drifted() {
-        const lock = `${yield* readLock}${nested("@reebeat/quality", "0.53.1")}`;
+        const lock = `${yield* readLock}${nested("@tsukuri/quality", "0.53.1")}`;
 
         assert.lengthOf(tsgoDrift(lock), 1);
       }).pipe(Effect.provide(NodeServices.layer))
@@ -140,7 +140,7 @@ describe("one @effect/tsgo for the repository", () => {
       ),
       1
     );
-    assert.deepStrictEqual(tsgoDrift(nested("@reebeat/quality", "0.53.1")), [
+    assert.deepStrictEqual(tsgoDrift(nested("@tsukuri/quality", "0.53.1")), [
       "@effect/tsgo has no root entry in bun.lock",
     ]);
   });
