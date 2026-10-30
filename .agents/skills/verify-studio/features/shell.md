@@ -9,7 +9,7 @@ Read `README.md` first: preconditions, the evidence rules and how the entries ar
 Spec: 0000, 0005
 Observes: spec 0000 "Not gated, observed once" (the built editor loads in a browser on Effect 4.1.0; Foldkit 0.170.0 since spec 0005); the boot test pins the same in happy-dom.
 
-- **Observe.** `scripts/doctor.sh` prints `DOCTOR OK`. In a browser tab on `<origin>/` (wait for network idle): the title is `reebeat studio`; `tab.errors()` holds no entry; every request goes to `<origin>` and answers 2xx or 304, except a possible `/favicon.ico` (404: the app ships no favicon; a browser that cached the 404 does not ask again; a different 404 is broken). `tab.console()` is empty in preview; in `dev` it holds only `[vite]` debug lines (`connecting...`, `connected.`, one pair per page load).
+- **Observe.** `scripts/doctor.sh` prints `DOCTOR OK`. In a browser tab on `<origin>/` (wait for network idle): the title is `tsukuri studio`; `tab.errors()` holds no entry; every request goes to `<origin>` and answers 2xx or 304, except a possible `/favicon.ico` (404: the app ships no favicon; a browser that cached the 404 does not ask again; a different 404 is broken). `tab.console()` is empty in preview; in `dev` it holds only `[vite]` debug lines (`connecting...`, `connected.`, one pair per page load).
 - **Broken when.** The title differs, the page is blank (the doctor's `h1` check fails), an error or any other console entry appears (in `dev` especially a `[foldkit] No response from @foldkit/vite-plugin` warning: the plugin is not loaded), a request leaves the origin (the free journey needs no network), or an asset answers 4xx or 5xx.
 - **Evidence.** `notes-browser-drive.json` (title, errors, console, requests), `serve.log`.
 
@@ -25,7 +25,7 @@ Spec: 0005
 
 Spec: 0000
 
-- **Observe.** `scripts/page.sh shell-desktop` writes `pages/shell-desktop.html` and `screenshots/shell-desktop.png`. The DOM has one `h1` `reebeat studio`, `section` regions named `Story graph`, `Preview` and `Timeline`, and an `aside` named `Inspector` (accessible names are `aria-label`s). Read the screenshot: each region shows its heading and its placeholder sentence (`The States and Beats of the story will appear here.`, `The story will play here.`, `The compiled timeline will appear here.`, `The properties of the selected Element will appear here.`), and the line `Placeholder shell: editing opens when the reebeat story IR is stable.` sits under the heading.
+- **Observe.** `scripts/page.sh shell-desktop` writes `pages/shell-desktop.html` and `screenshots/shell-desktop.png`. The DOM has one `h1` `tsukuri studio`, `section` regions named `Story graph`, `Preview` and `Timeline`, and an `aside` named `Inspector` (accessible names are `aria-label`s). Read the screenshot: each region shows its heading and its placeholder sentence (`The States and Beats of the story will appear here.`, `The story will play here.`, `The compiled timeline will appear here.`, `The properties of the selected Element will appear here.`), and the line `Placeholder shell: editing opens when the tsukuri story IR is stable.` sits under the heading.
 - **Broken when.** A region or an accessible name is missing or renamed, a region is empty, text is clipped, or the page shows a story (nothing reads the IR yet: a story on screen means unreviewed scope).
 - **Evidence.** `pages/shell-desktop.html`, `screenshots/shell-desktop.png`.
 

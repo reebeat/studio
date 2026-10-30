@@ -1,4 +1,4 @@
-# reebeat studio feature map
+# tsukuri studio feature map
 
 The maintained list of what a person can do or see in the editor, with how to observe each and what counts as broken. The entries live in the files below; this index holds what they share. Commands are relative to the skill directory, `.agents/skills/verify-studio/`.
 
@@ -14,7 +14,7 @@ Nothing below can be observed, so no entry exists: an entry for an unbuilt featu
 
 | Planned | Spec | Becomes entries like |
 | --- | --- | --- |
-| Story graph from a real story, preview scrub, one edit one patch, offline journey | [0001](../../../../docs/specs/0001-first-felt-journey.md) (blocked on reebeat 0004 and 0006) | `graph-matches-plan`, `preview-frame-equals-video-frame`, `edit-one-property`, `edit-refused-when-invalid`, `offline-free-journey` |
+| Story graph from a real story, preview scrub, one edit one patch, offline journey | [0001](../../../../docs/specs/0001-first-felt-journey.md) (blocked on tsukuri 0004 and 0006) | `graph-matches-plan`, `preview-frame-equals-video-frame`, `edit-one-property`, `edit-refused-when-invalid`, `offline-free-journey` |
 | The other lenses (Cut, Color, Audio, Deck, Review and so on) | [`docs/design/lenses.md`](../../../../docs/design/lenses.md), design only | one entry per lens when it has a spec |
 | Collaboration (replicated document, sync server) | spec 0002 (a spike, PR #3) | entries only if a user-visible surface lands |
 

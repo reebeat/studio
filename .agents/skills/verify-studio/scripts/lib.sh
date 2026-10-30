@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # Shared by the other scripts here; source it, do not run it.
 # Provenance: adapted from phibkro/vektorprogrammet-reimagined @ 1104c3019a76c619c4c8e9ee04c71ce191467ed4
-# (.agents/skills/verify-vektorprogrammet/scripts/lib.sh). Deviations: no database, CMS or overlay; reebeat studio's names.
+# (.agents/skills/verify-vektorprogrammet/scripts/lib.sh). Deviations: no database, CMS or overlay; tsukuri studio's names.
 #
 # Where things are:
 #   TREE           the worktree under verification: $VERIFY_TREE, else the git toplevel of the current directory.
 #   RUN_DIR        this run's directory in the evidence root, outside every path a worktree cleanup removes:
 #                  $VERIFY_RUN_DIR, else the one the tree's pointer names (written by launch.sh, removed by cleanup.sh).
-#   EVIDENCE_ROOT  $VERIFY_EVIDENCE_ROOT, else ~/.local/state/reebeat-studio-verify.
+#   EVIDENCE_ROOT  $VERIFY_EVIDENCE_ROOT, else ~/.local/state/tsukuri-studio-verify.
 
 # shellcheck disable=SC2034 # used by the scripts that source this file
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-EVIDENCE_ROOT="${VERIFY_EVIDENCE_ROOT:-$HOME/.local/state/reebeat-studio-verify}"
+EVIDENCE_ROOT="${VERIFY_EVIDENCE_ROOT:-$HOME/.local/state/tsukuri-studio-verify}"
 
 TREE="${VERIFY_TREE:-$(git rev-parse --show-toplevel)}"
 TREE="$(cd "$TREE" && pwd)"

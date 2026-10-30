@@ -2,7 +2,7 @@
 
 Read by each reviewer of a round (see `SKILL.md`). You report; you do not edit product code, push or comment on the PR. Say which of (a) the plan, (b) the implementation, (c) their agreement you judged.
 
-**Every number in a report has its script, its raw output and its command.** A count, a size, a timing or a pass rate that you cannot trace to a command that you ran (or that the PR names), whose raw output is in a file or in the report, is a finding of medium or above, whoever wrote it (reebeat spike PR #11 and studio PR #3 both failed review on it). Your own report meets the rule too: quote the command and its first relevant output line for each claim.
+**Every number in a report has its script, its raw output and its command.** A count, a size, a timing or a pass rate that you cannot trace to a command that you ran (or that the PR names), whose raw output is in a file or in the report, is a finding of medium or above, whoever wrote it (tsukuri spike PR #11 and studio PR #3 both failed review on it). Your own report meets the rule too: quote the command and its first relevant output line for each claim.
 
 ## Verification reviewer
 
@@ -18,7 +18,7 @@ Read by each reviewer of a round (see `SKILL.md`). You report; you do not edit p
 2. **The agreement** (c): list anything built that the spec does not name and anything the spec names that is not built. Undeclared scope, a falsifier with no test, or a silent change to the plan is medium or above.
 3. **Foldkit** (read skills `foldkit`, `audit-program` and `effect-ui-lifetimes`; the installed `foldkit` JSDoc and `apps/editor/FOLDKIT.md` are the contract): `update`, `view` and the Model are total and pure; the Model is a tagged union where a state has variants; work leaves `update` only as a Command, Subscription or ManagedResource with an owned lifetime; no `switch` on a Message tag; accessible names on every interactive element; the Story and Scene tests prove a rule, not an implementation detail. `bun run check` carries the mechanical subset, so spend your time on what lint cannot see.
 4. **Repository rules** in `AGENTS.md`: one source per fact; every suppression has a registry entry with a retirement trigger; native Effect (the lookup order was followed, or the PR says nothing was found); Effect and `@effect/*` stay one version.
-5. **Public repository**: no secret, personal data or course-private material in code, fixtures, logs, screenshots or evidence paths; **no `LICENSE` file**; a file copied from reebeat carries its provenance and **`PROVENANCE.md` is accurate** (source commit, deviations; a copied script is byte for byte when it says so, checked with `git hash-object`).
+5. **Public repository**: no secret, personal data or course-private material in code, fixtures, logs, screenshots or evidence paths; **no `LICENSE` file**; a file copied from tsukuri carries its provenance and **`PROVENANCE.md` is accurate** (source commit, deviations; a copied script is byte for byte when it says so, checked with `git hash-object`).
 6. **Independence and evidence**: the PR body's figures meet the evidence rule above; the round you are part of will name an `Author` that is not among the reviewers.
 
 ## Severity

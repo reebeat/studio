@@ -1,8 +1,8 @@
-# reebeat studio
+# tsukuri studio
 
-The collaborative editor for reebeat stories (a Foldkit app). reebeat (<https://github.com/reebeat/reebeat>, the open compiler) owns the story IR, the vocabulary (its `GLOSSARY.md`) and the Deck and Video renderers; this repository consumes them. Read [`README.md`](README.md); [`STATE.md`](STATE.md) says which spec is active. This repository is **public**: no secret, no personal data and no course-private material, ever. **Do not build editing features against the story IR yet**: it is changing (reebeat specs 0004 to 0006) and [spec 0001](docs/specs/0001-first-felt-journey.md) is blocked on them.
+The collaborative editor for tsukuri stories (a Foldkit app). tsukuri (<https://github.com/tsukuri-labs/tsukuri>, the open compiler) owns the story IR, the vocabulary (its `GLOSSARY.md`) and the Deck and Video renderers; this repository consumes them. Read [`README.md`](README.md); [`STATE.md`](STATE.md) says which spec is active. This repository is **public**: no secret, no personal data and no course-private material, ever. **Do not build editing features against the story IR yet**: it is changing (tsukuri specs 0004 to 0006) and [spec 0001](docs/specs/0001-first-felt-journey.md) is blocked on them.
 
-The lifecycle below is specified in [`docs/specs/0000-development-lifecycle.md`](docs/specs/0000-development-lifecycle.md). This file links facts that live in scripts or in the spec; it does not copy them. It was copied from reebeat's `AGENTS.md` and adapted (see [`PROVENANCE.md`](PROVENANCE.md)).
+The lifecycle below is specified in [`docs/specs/0000-development-lifecycle.md`](docs/specs/0000-development-lifecycle.md). This file links facts that live in scripts or in the spec; it does not copy them. It was copied from tsukuri's `AGENTS.md` and adapted (see [`PROVENANCE.md`](PROVENANCE.md)).
 
 ## How a change travels
 
@@ -68,7 +68,7 @@ Every agent that writes TypeScript here writes native Effect (v4, pinned in the 
 Branch protection includes administrators. To remove it (operator only, an external effect):
 
 ```sh
-gh api -X DELETE repos/reebeat/studio/branches/main/protection
+gh api -X DELETE repos/tsukuri-labs/studio/branches/main/protection
 ```
 
 Restore it afterwards as spec 0000 describes it.

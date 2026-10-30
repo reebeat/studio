@@ -1,6 +1,6 @@
 ---
 name: verify-studio
-description: "Run the reebeat studio editor (a Foldkit app) on a disposable instance, drive it in a real browser as a person does, and keep evidence that survives cleanup. Use to verify a change to apps/editor or its toolchain, to review a studio pull request, or to update the feature map when a PR adds or changes user-visible behaviour."
+description: "Run the tsukuri studio editor (a Foldkit app) on a disposable instance, drive it in a real browser as a person does, and keep evidence that survives cleanup. Use to verify a change to apps/editor or its toolchain, to review a studio pull request, or to update the feature map when a PR adds or changes user-visible behaviour."
 ---
 
 <!-- Provenance: adapted from phibkro/vektorprogrammet-reimagined @ 1104c3019a76c619c4c8e9ee04c71ce191467ed4
@@ -8,7 +8,7 @@ description: "Run the reebeat studio editor (a Foldkit app) on a disposable inst
      `lib.sh`. Deviations: no database, CMS or overlay; one Vite app; headless Chromium and the OMP `browser` tool.
      Spec 0003 introduced it. See PROVENANCE.md. -->
 
-# Verify reebeat studio
+# Verify tsukuri studio
 
 You are reading this cold, mid-task. This skill builds and serves the editor of one worktree, checks that the instance is worth driving, drives the features in the feature map as a user does, saves evidence outside the worktree, and tears everything down without touching the evidence.
 
@@ -35,11 +35,11 @@ Run it under a supervisor that keeps custody and waits for the ready line; never
 
 In order: refuses a second live run for the worktree; runs `headroom.sh` (the operator's limits of 2026-10-29: `MemAvailable` after the job's demand at least 20% of RAM, swap-in under 1000 pages per second over a 10 s sample, memory PSI `full` avg60 under 10%, 1-minute load average under the CPU threads, and free disk for the job's writes; short on any → exit 1 and it names each one; `VERIFY_FORCE=1` skips it and the report records that); installs dependencies in a fresh worktree; creates the run directory and a per-worktree pointer **before** starting anything, so `cleanup.sh` finds the run even if the server never comes up; builds (preview); serves; runs the doctor. **Ready means usable.** A build that fails stops the launch: that is a finding, with the log in `serve.log`. Back off your own job if PSI `full` avg60 stays above 20%, or swap-in stays above its limit, for a minute.
 
-Knobs: `VERIFY_TREE`, `VERIFY_PR` (names the run directory `<UTC date>-pr<N>`, else the short sha), `VERIFY_EVIDENCE_ROOT` (default `~/.local/state/reebeat-studio-verify`), `VERIFY_FORCE=1`, and `DEMAND_MEM_MIB` / `DEMAND_DISK_MIB` / `SAMPLE_SECONDS` for `headroom.sh`. Never drive an origin this run did not print.
+Knobs: `VERIFY_TREE`, `VERIFY_PR` (names the run directory `<UTC date>-pr<N>`, else the short sha), `VERIFY_EVIDENCE_ROOT` (default `~/.local/state/tsukuri-studio-verify`), `VERIFY_FORCE=1`, and `DEMAND_MEM_MIB` / `DEMAND_DISK_MIB` / `SAMPLE_SECONDS` for `headroom.sh`. Never drive an origin this run did not print.
 
 ## Doctor
 
-`scripts/doctor.sh` prints `DOCTOR OK` and exits 0 only if: `launch.sh` is alive; the worktree is still at the commit that was launched (a checkout underneath a running instance makes every observation about another commit); the port is held by this run's process tree; `/` answers with `<title>reebeat studio</title>`; and headless Chromium renders the `h1` and the `Story graph`, `Preview` and `Timeline` regions (the Foldkit runtime booted). Run it before the first drive, after any failed drive, and whenever a page looks wrong. On `DOCTOR FAILED` read `serve.log` in the run directory.
+`scripts/doctor.sh` prints `DOCTOR OK` and exits 0 only if: `launch.sh` is alive; the worktree is still at the commit that was launched (a checkout underneath a running instance makes every observation about another commit); the port is held by this run's process tree; `/` answers with `<title>tsukuri studio</title>`; and headless Chromium renders the `h1` and the `Story graph`, `Preview` and `Timeline` regions (the Foldkit runtime booted). Run it before the first drive, after any failed drive, and whenever a page looks wrong. On `DOCTOR FAILED` read `serve.log` in the run directory.
 
 ## Drive
 
@@ -65,7 +65,7 @@ The `agent-browser` CLI (skill `agent-browser`) is the fallback when the OMP too
 
 ## Evidence
 
-The run directory is `~/.local/state/reebeat-studio-verify/<UTC date>-pr<N>/` (a second run the same day gets `-2`): outside the worktree and outside every path a worktree or `git clean` removes. `cleanup.sh` never deletes it.
+The run directory is `~/.local/state/tsukuri-studio-verify/<UTC date>-pr<N>/` (a second run the same day gets `-2`): outside the worktree and outside every path a worktree or `git clean` removes. `cleanup.sh` never deletes it.
 
 | Path | What |
 | --- | --- |

@@ -52,7 +52,7 @@ export const effectFamilyDrift = (lock: string): readonly string[] => {
 };
 
 // A `@effect/tsgo` entry: its key is `@effect/tsgo` at the root or `<host>/@effect/tsgo` for a copy nested under `host`
-// (a workspace package such as `@reebeat/quality`, or a dependency that pins its own).
+// (a workspace package such as `@tsukuri/quality`, or a dependency that pins its own).
 const tsgoEntry =
   /^\s+"(?<key>(?:[^"]+\/)?@effect\/tsgo)": \["@effect\/tsgo@(?<version>[^"]+)"/gmu;
 

@@ -1,7 +1,7 @@
 # 0005 Foldkit 0.170.0 and the Vite plugin back on
 
 Status: **spec** (frozen when its PR opens). Date: 2026-10-29. Decided by: the lead's assignment of 2026-10-29 (Foldkit 0.170.0 and `@foldkit/vite-plugin` 0.29.0 were published 2026-10-29 19:26 UTC; bump, remove the workaround, run `ready` and the real browser journey).
-Process: [spec 0000](0000-development-lifecycle.md). Branch `feat/0005-foldkit-0170`, from `main` at `d4fd75e`. Not stacked on PR #6 (spec 0004, held for Alchemy). Closes [issue #4](https://github.com/reebeat/studio/issues/4).
+Process: [spec 0000](0000-development-lifecycle.md). Branch `feat/0005-foldkit-0170`, from `main` at `d4fd75e`. Not stacked on PR #6 (spec 0004, held for Alchemy). Closes [issue #4](https://github.com/tsukuri-labs/studio/issues/4).
 Feature map: `shell-load` (changed: the dev console has only `[vite]` lines) and `shell-dev-reload` (new: the Model survives a saved file); both name this spec with `Spec:`.
 
 ## Problem
@@ -13,7 +13,7 @@ Spec 0000 (Revisions 2026-10-29) left `@foldkit/vite-plugin` off: release 0.28.0
 A developer runs `devenv shell -- bun run dev` (or the verify skill starts `vp dev`) and opens the editor.
 
 1. `vp dev` starts, loads `apps/editor/vite.config.ts` with the Foldkit plugin and prints `[foldkit:devTools] MCP relay listening at …`.
-2. The page loads: title `reebeat studio`, the heading, the three regions and the Inspector, no error and no `[foldkit] No response` warning in the console.
+2. The page loads: title `tsukuri studio`, the heading, the three regions and the Inspector, no error and no `[foldkit] No response` warning in the console.
 3. Click `Hide inspector`: the aside goes away. Edit `apps/editor/src/main.ts` (a visible string): the plugin reloads the document (it is a full reload, not a hot module update), the new text shows, and the Inspector is still hidden: the Model was **kept**, which is what the warning said was missing.
 4. `vp build` and `vp preview` serve the same bundle as before.
 

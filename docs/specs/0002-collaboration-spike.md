@@ -2,11 +2,11 @@
 
 Status: **spike report** (a measured recommendation; it builds nothing in `apps/`). Frozen when its PR opens; later changes are dated entries under Revisions. Date: 2026-10-29. Decided by: the lead's assignment of 2026-10-29 (questions 1 to 5 below); the recommendation is the spike's; the operator decided the library and the edit model on 2026-10-29 (see Decisions), and one choice remains open (see Open questions).
 Verify skill: none, spike
-Process: [spec 0000](0000-development-lifecycle.md). Builds on [spec 0001](0001-first-felt-journey.md), which leaves the sync design to its own spec and records, in its Revision of 2026-10-29 ("the replicated unit is not the patch"), the decisions this spike's evidence supports; this is the evidence for that spec. The IR shape is read from reebeat's branch `feat/0004-state-machines` at commit `a01bb39` (committed state only; the worktree had uncommitted changes that were not used), read-only.
+Process: [spec 0000](0000-development-lifecycle.md). Builds on [spec 0001](0001-first-felt-journey.md), which leaves the sync design to its own spec and records, in its Revision of 2026-10-29 ("the replicated unit is not the patch"), the decisions this spike's evidence supports; this is the evidence for that spec. The IR shape is read from tsukuri's branch `feat/0004-state-machines` at commit `a01bb39` (committed state only; the worktree had uncommitted changes that were not used), read-only.
 
 ## Problem
 
-Studio is a collaborative editor, and its first paid feature is a multiplayer sync server (spec 0001, "Where the free and the paid line falls"). Two people, or a person and an agent, will edit one story at once. Three things decide whether that works: the library that merges concurrent edits, the shape of the document the library holds, and what happens when a merge is well-formed for the library but breaks a rule of the story IR (a dangling reference, a cycle, a duplicate id). reebeat's render is a pure function of the document, so the merged document must also be the same bytes on every peer.
+Studio is a collaborative editor, and its first paid feature is a multiplayer sync server (spec 0001, "Where the free and the paid line falls"). Two people, or a person and an agent, will edit one story at once. Three things decide whether that works: the library that merges concurrent edits, the shape of the document the library holds, and what happens when a merge is well-formed for the library but breaks a rule of the story IR (a dangling reference, a cycle, a duplicate id). tsukuri's render is a pure function of the document, so the merged document must also be the same bytes on every peer.
 
 ## Questions (from the assignment)
 
@@ -29,12 +29,12 @@ Studio is a collaborative editor, and its first paid feature is a multiplayer sy
 
 ## Method
 
-Everything below was built and run from the code in [`spike/collab/`](https://github.com/reebeat/studio/tree/spike/collaboration-code/spike/collab) on branch `spike/collaboration-code` (commit `b43f82b57b1c57ce993e89c2d32e090558aad91a`). It is throwaway measurement code, not part of the product's gates; its [README](https://github.com/reebeat/studio/blob/spike/collaboration-code/spike/collab/README.md) maps each number below to the command that makes it and to the raw output committed in `spike/collab/output/`. Pins: `yjs` 13.6.33, `@automerge/automerge` 3.5.0, `loro-crdt` 1.17.1, `effect` 4.1.0, `miniflare` 4.20260730.0, Bun 1.3.13, Node 24.21.
+Everything below was built and run from the code in [`spike/collab/`](https://github.com/tsukuri-labs/studio/tree/spike/collaboration-code/spike/collab) on branch `spike/collaboration-code` (commit `b43f82b57b1c57ce993e89c2d32e090558aad91a`). It is throwaway measurement code, not part of the product's gates; its [README](https://github.com/tsukuri-labs/studio/blob/spike/collaboration-code/spike/collab/README.md) maps each number below to the command that makes it and to the raw output committed in `spike/collab/output/`. Pins: `yjs` 13.6.33, `@automerge/automerge` 3.5.0, `loro-crdt` 1.17.1, `effect` 4.1.0, `miniflare` 4.20260730.0, Bun 1.3.13, Node 24.21.
 
-- **The IR is the real one.** `GraphSchema`, `validateScene` and `jsonCodec` are the code of reebeat `a01bb39` (a copy of `packages/core/src`, unchanged). The story is `stories/same-id` (seven scenes), imported with the real Fountain importer (the fixture's SHA-256 is `6a71b9fa2f96837034b0cffd6c90023c4d374f2ad75e55a7151308f3f50b8e9e`), so the document has real Elements, effects, derived events (`let`) and chapters. A merged document is **valid** when `GraphSchema` decodes it, `validateScene` finds nothing in any scene (with the identity diff against the previous scene, as `planScenes` computes it), and a small stand-in for invariants 0004 does not state finds nothing.
+- **The IR is the real one.** `GraphSchema`, `validateScene` and `jsonCodec` are the code of tsukuri `a01bb39` (a copy of `packages/core/src`, unchanged). The story is `stories/same-id` (seven scenes), imported with the real Fountain importer (the fixture's SHA-256 is `6a71b9fa2f96837034b0cffd6c90023c4d374f2ad75e55a7151308f3f50b8e9e`), so the document has real Elements, effects, derived events (`let`) and chapters. A merged document is **valid** when `GraphSchema` decodes it, `validateScene` finds nothing in any scene (with the identity diff against the previous scene, as `planScenes` computes it), and a small stand-in for invariants 0004 does not state finds nothing.
 - **Stand-ins, named.** 0004 has no attribute curves and no numeric position yet (the decided IR will: "attributes are data curves over time"). Element `one` of scene `sc4` carries two stand-in fields for the spike: `at: {x, y}` and `curves.opacity`, four control points `(t, v)`, with the invariants that `t` starts at 0, ends at 1 and strictly increases. Two derived events `p` and `q` were added to `sc4` for the cycle case. `GraphSchema` is closed, so these fields are removed before it decodes the document and are checked on their own.
 - **Cases run on 3 libraries times 2 models.** The libraries sit behind one path-addressed interface (`put`, `insert`, `remove`, `move`, `merge`, `json`, `save`, `updateSince`, ...), so each case is written once. Peer ids 2 and 3 edit a fork of one seeded replica without seeing each other, then merge both ways. Every case was also run with the two peer ids swapped. 19 cases, 114 runs.
-- **IR-invariant gaps found on the way** are in "Feedback for reebeat".
+- **IR-invariant gaps found on the way** are in "Feedback for tsukuri".
 
 ## 1. Candidates
 
@@ -113,7 +113,7 @@ On the same 114 runs, applied to the 48 that were invalid as merged:
 
 The three compose, in this order of cost: keyed ids remove what can be removed; the rest is conflicts of intent, which only a person can settle. The recommendation: the gate in the Durable Object is the authority; the repair is computed and offered as a compensating patch (a suggestion, as in [`docs/design/lenses.md`](../design/lenses.md), "suggestion mode"), never applied without a person.
 
-`validateScene` does not detect everything the merged documents broke (see Feedback for reebeat).
+`validateScene` does not detect everything the merged documents broke (see Feedback for tsukuri).
 
 ## 4. Determinism
 
@@ -220,7 +220,7 @@ Reading: Yjs is smallest in JS and fastest overall; Automerge's file is the smal
 - Documents above 210 scenes, or long offline divergence, or a malicious peer (Loro's documentation says it has no byzantine-fault tolerance; its comparison table credits Automerge with it, <https://www.loro.dev/docs>; no Automerge document saying so was read).
 - `Y.Doc` v14 (a release candidate).
 
-## Feedback for reebeat (0004, 0005, 0006)
+## Feedback for tsukuri (0004, 0005, 0006)
 
 When the IR becomes the committed source, some invariants are held by the Fountain importer or by nothing, and a merged or hand-edited JSON breaks them without an error from `GraphSchema` or `validateScene` (control runs against `a01bb39`): two Elements with one id in a scene (accepted, control run and case d4); two effects or an effect and a derived event with one name (accepted, case c2; the importer's `nameTaken` checks it while parsing); two scenes with one id (case a4; `validateScene` is per scene and cannot see it); `chapterId` and `chapter.sceneIds` out of step with the scenes (the IR keeps both, so two copies of one fact exist; the line ids `<scene>.l<n>` are likewise derivable and stored). In the spike these were caught only by the stand-in checks.
 

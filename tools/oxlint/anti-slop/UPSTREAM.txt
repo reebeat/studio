@@ -11,10 +11,10 @@ These files are ours now. Change a rule when it stops matching how this reposito
 
 ## Local changes (this repository)
 
-- Kept: the 18 generic rules in `rules/` (`index.ts`, plugin `reebeat-anti-slop`), the 5 Effect rules in `effect/` (`effect/index.ts`, plugin `anti-slop-effect`), `shared/`, `effect/shared/` and `vendor/eslint-stylistic/`.
+- Kept: the 18 generic rules in `rules/` (`index.ts`, plugin `tsukuri-anti-slop`), the 5 Effect rules in `effect/` (`effect/index.ts`, plugin `anti-slop-effect`), `shared/`, `effect/shared/` and `vendor/eslint-stylistic/`.
 - Only `effect/index.ts` is loaded by the root `vite.config.ts`. Ultracite's `anti-slop` preset ships a bundled build of the same 18 generic rules and enables them, so the repository config enables no generic rule a second time; the generic sources stay here as the copy to change if a rule must diverge from Ultracite's.
 - Dropped from the donor: `no-dev-server`, `no-implicit-date-time-zone`, `no-multi-statement-unsafe`, `no-owned-table-write`, `no-unkeyed-command-row`, `no-zoneless-calendar-interval` and their tests (donor database and calendar domain rules), and the donor's `tools/oxlint/package.json` (its `node --test` script ran only those rules' tests).
-- Renamed the plugin `vektor-anti-slop` to `reebeat-anti-slop`.
+- Renamed the plugin `vektor-anti-slop` to `tsukuri-anti-slop`.
 - The directory is excluded from lint, formatting and duplicate detection in the root configuration (`vite.config.ts`, `.jscpd.json`, `knip.json`), as in the donor.
 
 ## Earlier local changes (carried from the donor's UPSTREAM.txt, rules not copied here)

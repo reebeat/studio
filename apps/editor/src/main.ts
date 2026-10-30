@@ -114,11 +114,11 @@ export const view = (model: Model, h: HtmlBuilder<Message>): Document => ({
           h.div(
             [],
             [
-              h.h1([h.Class("text-2xl font-bold")], ["reebeat studio"]),
+              h.h1([h.Class("text-2xl font-bold")], ["tsukuri studio"]),
               h.p(
                 [h.Class("text-gray-600")],
                 [
-                  "Placeholder shell: editing opens when the reebeat story IR is stable.",
+                  "Placeholder shell: editing opens when the tsukuri story IR is stable.",
                 ]
               ),
             ]
@@ -157,5 +157,5 @@ export const view = (model: Model, h: HtmlBuilder<Message>): Document => ({
       ),
     ]
   ),
-  title: "reebeat studio",
+  title: "tsukuri studio",
 });

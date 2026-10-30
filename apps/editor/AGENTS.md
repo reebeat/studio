@@ -12,7 +12,7 @@ The subtree was not vendored: `repos/foldkit` is a large public repository and t
 
 ## Project Notes
 
-- The shell is a placeholder (spec 0000). Do not build editing features against the story IR yet: spec 0001 is blocked on reebeat specs 0004 and 0006.
+- The shell is a placeholder (spec 0000). Do not build editing features against the story IR yet: spec 0001 is blocked on tsukuri specs 0004 and 0006.
 - `src/main.ts` holds the pure definitions (Model, Message, init, update, view); `src/entry.ts` is the only module that boots the runtime. Tests are `src/story.test.ts` (drives `update`) and `src/scene.test.ts` (drives the view).
 - The repository formats with Oxfmt (double quotes, semicolons) and lints with the Foldkit plugin; the generated files were reformatted, not hand-edited for style.
 - Import `describe`, `test` and `expect` from `vite-plus/test`, not `vitest` (lint rule `vite-plus/prefer-vite-plus-imports`).

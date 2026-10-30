@@ -42,7 +42,7 @@ it.live(
         (found) => found !== null
       );
 
-      assert.strictEqual(heading?.textContent, "reebeat studio");
+      assert.strictEqual(heading?.textContent, "tsukuri studio");
       assert.isNotNull(wrapper.querySelector("aside"));
 
       wrapper.querySelector("button")?.dispatchEvent(new Event("click"));
